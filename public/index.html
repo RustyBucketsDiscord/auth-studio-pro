@@ -2,82 +2,80 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Auth Studio Pro - AI Authentication</title>
-<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+*{margin:0;padding:0;box-sizing:border-box}
 :root{--bg:#0a0a0a;--s1:#111;--s2:#1a1a1a;--bd:#2a2a2a;--ac:#00ff88;--re:#ff3355;--ye:#ffcc00;--tx:#fff;--t2:#888;--t3:#555;--rr:12px}
-body{background:var(--bg);color:var(--tx);font-family:'DM Sans',sans-serif;min-height:100vh;-webkit-font-smoothing:antialiased}
+body{background:var(--bg);color:var(--tx);font-family:"DM Sans",sans-serif;min-height:100vh}
 .hdr{display:flex;align-items:center;justify-content:space-between;padding:20px 32px;border-bottom:1px solid var(--bd);position:sticky;top:0;background:rgba(10,10,10,.95);backdrop-filter:blur(12px);z-index:100}
-.logo{font-family:'Space Mono',monospace;font-size:16px;font-weight:700;display:flex;align-items:center;gap:10px}
+.logo{font-family:"Space Mono",monospace;font-size:16px;font-weight:700;display:flex;align-items:center;gap:10px}
 .dot{width:8px;height:8px;background:var(--ac);border-radius:50%;animation:pulse 2s infinite}
-@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.8)}}
-.badge{font-family:'Space Mono',monospace;font-size:11px;color:var(--ac);border:1px solid var(--ac);padding:4px 10px;border-radius:4px;letter-spacing:1px}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.badge{font-family:"Space Mono",monospace;font-size:11px;color:var(--ac);border:1px solid var(--ac);padding:4px 10px;border-radius:4px;letter-spacing:1px}
 .main{max-width:800px;margin:0 auto;padding:40px 24px}
 .steps{display:flex;align-items:center;gap:8px;margin-bottom:40px}
-.step{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--t3);transition:color .3s}
+.step{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--t3)}
 .step.active{color:var(--tx)}.step.done{color:var(--ac)}
-.sn{width:26px;height:26px;border-radius:50%;border:1px solid var(--bd);display:flex;align-items:center;justify-content:center;font-family:'Space Mono',monospace;font-size:11px;transition:all .3s}
+.sn{width:26px;height:26px;border-radius:50%;border:1px solid var(--bd);display:flex;align-items:center;justify-content:center;font-family:"Space Mono",monospace;font-size:11px}
 .step.active .sn{border-color:var(--tx);background:var(--tx);color:var(--bg)}
 .step.done .sn{border-color:var(--ac);background:var(--ac);color:var(--bg)}
 .sl{flex:1;height:1px;background:var(--bd);max-width:60px}
 .card{background:var(--s1);border:1px solid var(--bd);border-radius:var(--rr);padding:28px;margin-bottom:20px}
-.ct{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:2px;color:var(--t2);text-transform:uppercase;margin-bottom:16px}
+.ct{font-family:"Space Mono",monospace;font-size:11px;letter-spacing:2px;color:var(--t2);text-transform:uppercase;margin-bottom:16px}
 .cgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px}
-.cb{background:var(--s2);border:1px solid var(--bd);border-radius:8px;padding:18px 12px;cursor:pointer;text-align:center;transition:all .2s;color:var(--tx)}
+.cb{background:var(--s2);border:1px solid var(--bd);border-radius:8px;padding:18px 12px;cursor:pointer;text-align:center;color:var(--tx);transition:all .2s}
 .cb:hover{border-color:var(--t3)}.cb.sel{border-color:var(--ac);background:rgba(0,255,136,.08)}
-.ci{font-size:11px;font-family:'Space Mono',monospace;color:var(--ac);margin-bottom:8px;letter-spacing:1px}
+.ci{font-size:10px;font-family:"Space Mono",monospace;color:var(--ac);margin-bottom:8px;letter-spacing:1px}
 .cl{font-size:13px;font-weight:600}.cc{font-size:11px;color:var(--t2);margin-top:3px}
 .grow{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .ig{display:flex;flex-direction:column;gap:6px}
 .il{font-size:12px;color:var(--t2)}
-.inf{background:var(--s2);border:1px solid var(--bd);border-radius:8px;padding:12px 14px;color:var(--tx);font-size:14px;font-family:'DM Sans',sans-serif;outline:none;transition:border-color .2s;width:100%}
+.inf{background:var(--s2);border:1px solid var(--bd);border-radius:8px;padding:12px 14px;color:var(--tx);font-size:14px;font-family:"DM Sans",sans-serif;outline:none;width:100%;transition:border-color .2s}
 .inf:focus{border-color:var(--ac)}.inf::placeholder{color:var(--t3)}
-.dz{border:2px dashed var(--bd);border-radius:var(--rr);padding:32px;text-align:center;cursor:pointer;transition:all .2s;position:relative}
+.dz{border:2px dashed var(--bd);border-radius:var(--rr);padding:32px;text-align:center;cursor:pointer;position:relative;transition:all .2s}
 .dz:hover,.dz.drag{border-color:var(--ac);background:rgba(0,255,136,.04)}
 .dz input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
 .pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:8px;margin-top:14px}
-.thumb{position:relative;aspect-ratio:1;border-radius:8px;overflow:hidden;background:var(--s2);border:1px solid var(--bd)}
+.thumb{position:relative;aspect-ratio:1;border-radius:8px;overflow:hidden;border:1px solid var(--bd)}
 .thumb img{width:100%;height:100%;object-fit:cover}
-.trm{position:absolute;top:4px;right:4px;width:20px;height:20px;background:rgba(0,0,0,.8);border:none;border-radius:50%;color:#fff;font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1}
+.trm{position:absolute;top:4px;right:4px;width:20px;height:20px;background:rgba(0,0,0,.8);border:none;border-radius:50%;color:#fff;font-size:13px;cursor:pointer;line-height:20px;text-align:center}
 .slist{display:flex;flex-direction:column;gap:6px;margin-top:10px}
 .si{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--t2)}
 .sc{width:18px;height:18px;border-radius:4px;border:1px solid var(--bd);display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0}
 .sc.ok{border-color:var(--ac);background:rgba(0,255,136,.15);color:var(--ac)}
-.btn1{width:100%;padding:18px;background:var(--ac);color:var(--bg);border:none;border-radius:var(--rr);font-family:'Space Mono',monospace;font-size:14px;font-weight:700;letter-spacing:1px;cursor:pointer;transition:all .2s;margin-top:8px}
+.btn1{width:100%;padding:18px;background:var(--ac);color:var(--bg);border:none;border-radius:var(--rr);font-family:"Space Mono",monospace;font-size:14px;font-weight:700;letter-spacing:1px;cursor:pointer;margin-top:8px;transition:all .2s}
 .btn1:hover:not(:disabled){transform:translateY(-1px);box-shadow:0 8px 24px rgba(0,255,136,.3)}
 .btn1:disabled{opacity:.4;cursor:not-allowed}
-.btn2{width:100%;padding:14px;background:transparent;color:var(--t2);border:1px solid var(--bd);border-radius:var(--rr);font-family:'Space Mono',monospace;font-size:13px;cursor:pointer;transition:all .2s;margin-top:8px}
+.btn2{width:100%;padding:14px;background:transparent;color:var(--t2);border:1px solid var(--bd);border-radius:var(--rr);font-family:"Space Mono",monospace;font-size:13px;cursor:pointer;margin-top:8px;transition:all .2s}
 .btn2:hover{border-color:var(--t2);color:var(--tx)}
 .ld{text-align:center;padding:48px 24px}
 .sp{width:48px;height:48px;border:2px solid var(--bd);border-top-color:var(--ac);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 20px}
 @keyframes spin{to{transform:rotate(360deg)}}
-.lt{font-family:'Space Mono',monospace;font-size:13px;color:var(--t2);letter-spacing:1px}
-.ld-dt::after{content:'';animation:dt 1.5s infinite}
-@keyframes dt{0%{content:''}33%{content:'.'}66%{content:'..'}100%{content:'...'}}
+.lt{font-family:"Space Mono",monospace;font-size:13px;color:var(--t2);letter-spacing:1px}
+.dots::after{content:"";animation:dt 1.5s infinite}
+@keyframes dt{0%{content:""}33%{content:"."}66%{content:".."}100%{content:"..."}}
 .rc{background:var(--s1);border:1px solid var(--bd);border-radius:var(--rr);overflow:hidden;animation:up .4s ease}
 @keyframes up{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
 .vb{padding:28px 32px;display:flex;align-items:center;justify-content:space-between}
 .va{background:rgba(0,255,136,.12);border-bottom:1px solid rgba(0,255,136,.3)}
 .vr{background:rgba(255,51,85,.12);border-bottom:1px solid rgba(255,51,85,.3)}
 .vi{background:rgba(255,204,0,.08);border-bottom:1px solid rgba(255,204,0,.2)}
-.vl{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:3px;text-transform:uppercase;margin-bottom:6px}
+.vl{font-family:"Space Mono",monospace;font-size:11px;letter-spacing:3px;text-transform:uppercase;margin-bottom:6px}
 .va .vl{color:var(--ac)}.vr .vl{color:var(--re)}.vi .vl{color:var(--ye)}
 .vt{font-size:28px;font-weight:700;letter-spacing:-.5px}
 .cr{width:80px;height:80px;position:relative;flex-shrink:0}
 .cr svg{transform:rotate(-90deg)}
 .cr circle{fill:none;stroke-width:5;stroke-linecap:round}
 .rb{stroke:var(--bd)}.ra{stroke:var(--ac)}.rr2{stroke:var(--re)}.ri{stroke:var(--ye)}
-.cn{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'Space Mono',monospace;font-size:16px;font-weight:700}
-.rbody{padding:28px 32px}
-.rs{margin-bottom:24px}
-.rst{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:2px;color:var(--t3);text-transform:uppercase;margin-bottom:10px}
+.cn{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:"Space Mono",monospace;font-size:16px;font-weight:700}
+.rbody{padding:28px 32px}.rs{margin-bottom:24px}
+.rst{font-family:"Space Mono",monospace;font-size:10px;letter-spacing:2px;color:var(--t3);text-transform:uppercase;margin-bottom:10px}
 .rtx{font-size:15px;line-height:1.7;color:var(--t2)}
 .ckg{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .cki{display:flex;align-items:flex-start;gap:10px;background:var(--s2);border-radius:8px;padding:12px;font-size:13px}
-.cko{font-size:14px;flex-shrink:0;margin-top:1px}
-.ckd{color:var(--t2);line-height:1.4}
+.cko{font-size:14px;flex-shrink:0;margin-top:1px}.ckd{color:var(--t2);line-height:1.4}
 .fl{display:flex;flex-direction:column;gap:8px}
 .fi{display:flex;align-items:flex-start;gap:10px;background:rgba(255,51,85,.06);border:1px solid rgba(255,51,85,.15);border-radius:8px;padding:12px;font-size:13px;color:var(--t2)}
 .fd{width:6px;height:6px;border-radius:50%;background:var(--re);flex-shrink:0;margin-top:5px}
@@ -127,7 +125,7 @@ body{background:var(--bg);color:var(--tx);font-family:'DM Sans',sans-serif;min-h
       <div class="dz" id="dz">
         <input type="file" id="fi" accept="image/*" multiple>
         <div style="font-size:14px;color:var(--t2);margin-bottom:6px">[ DROP PHOTOS HERE ]</div>
-        <div style="font-size:12px;color:var(--t3)">or click to browse &mdash; at least <span id="mnt">3</span> photos recommended</div>
+        <div style="font-size:12px;color:var(--t3)">or click to browse &mdash; at least <span id="mnt">3</span> photos</div>
       </div>
       <div class="pgrid" id="pgrid"></div>
       <div id="pcnt" style="display:none;font-size:12px;color:var(--t2);margin-top:8px"><span id="pnum">0</span> photos selected</div>
@@ -141,7 +139,7 @@ body{background:var(--bg);color:var(--tx);font-family:'DM Sans',sans-serif;min-h
   <div id="p-results" class="hidden">
     <div id="ldg" class="card ld">
       <div class="sp"></div>
-      <div class="lt">ANALYZING AUTHENTICATION<span class="ld-dt"></span></div>
+      <div class="lt">ANALYZING<span class="dots"></span></div>
       <div style="font-size:12px;color:var(--t3);margin-top:8px">Running AI vision analysis &amp; web research</div>
     </div>
     <div id="rout" class="rc hidden"></div>
@@ -149,15 +147,15 @@ body{background:var(--bg);color:var(--tx);font-family:'DM Sans',sans-serif;min-h
   </div>
 </main>
 <script>
-var CATS=[
-  {id:"sneakers",label:"Sneakers",tag:"FOOTWEAR",min:5,req:["Both shoes side profile","Toe box front-on","Heel tab close-up","Tongue tag (readable)","Outsole tread"],bon:["Insole removed","Box label/SKU","Interior heel stitching","Lace aglets","Midsole edge"]},
-  {id:"hoodies",label:"Hoodies / Jackets",tag:"TOPS",min:4,req:["Front flat lay","Back flat lay","Neck/collar tag","Print or embroidery close-up"],bon:["Inner care tag","Side seam stitching","Zipper pull","Cuffs","Hood lining"]},
-  {id:"tops",label:"T-Shirts / Tops",tag:"TOPS",min:3,req:["Front flat lay","Neck tag","Print close-up"],bon:["Back flat lay","Hem stitching","Sleeve seam","Side tag"]},
-  {id:"bottoms",label:"Bottoms / Joggers",tag:"BOTTOMS",min:4,req:["Front flat lay","Back flat lay","Waistband inner tag","Ankle cuff"],bon:["Drawstring aglets","Inseam stitching","Pocket lining","Embroidery close-up"]},
-  {id:"sets",label:"Full Sets",tag:"SET",min:5,req:["Set laid flat together","Top tag","Bottom tag","Color match close-up","Logo on each piece"],bon:["Stitching comparison","Set hanging","Care label","Waistband detail"]},
-  {id:"accessories",label:"Accessories / Bags",tag:"ACC",min:3,req:["Front view","Back view","Brand markings close-up"],bon:["Hardware detail","Stitching","Lining","Tags/labels"]}
+var CATS = [
+  {id:"sneakers",tag:"FOOTWEAR",label:"Sneakers",min:5,req:["Both shoes side profile","Toe box front-on","Heel tab close-up","Tongue tag readable","Outsole tread"],bon:["Insole removed","Box label SKU","Interior heel stitching","Lace aglets","Midsole edge"]},
+  {id:"hoodies",tag:"TOPS",label:"Hoodies / Jackets",min:4,req:["Front flat lay","Back flat lay","Neck collar tag","Print or embroidery close-up"],bon:["Inner care tag","Side seam stitching","Zipper pull","Cuffs","Hood lining"]},
+  {id:"tops",tag:"TOPS",label:"T-Shirts / Tops",min:3,req:["Front flat lay","Neck tag","Print close-up"],bon:["Back flat lay","Hem stitching","Sleeve seam","Side tag"]},
+  {id:"bottoms",tag:"BOTTOMS",label:"Bottoms / Joggers",min:4,req:["Front flat lay","Back flat lay","Waistband inner tag","Ankle cuff"],bon:["Drawstring aglets","Inseam stitching","Pocket lining","Embroidery close-up"]},
+  {id:"sets",tag:"SET",label:"Full Sets",min:5,req:["Set laid flat together","Top tag","Bottom tag","Color match close-up","Logo on each piece"],bon:["Stitching comparison","Set hanging","Care label","Waistband detail"]},
+  {id:"accessories",tag:"ACC",label:"Accessories / Bags",min:3,req:["Front view","Back view","Brand markings close-up"],bon:["Hardware detail","Stitching","Lining","Tags and labels"]}
 ];
-var COLS=[
+var COLS = [
   {b:["nike","nocta"],n:"Nike x NOCTA"},
   {b:["jordan","travis scott"],n:"Jordan x Travis Scott"},
   {b:["jordan","off-white"],n:"Jordan x Off-White"},
@@ -166,65 +164,94 @@ var COLS=[
   {b:["new balance","joe freshgoods"],n:"New Balance x Joe Freshgoods"},
   {b:["adidas","bad bunny"],n:"Adidas x Bad Bunny"}
 ];
-var S={cat:null,brand:"",model:"",color:"",price:"",photos:[],previews:[]};
-function g(id){return document.getElementById(id)}
-function cat(){return CATS.find(function(c){return c.id===S.cat})}
+var S = {cat:null,brand:"",model:"",color:"",price:"",photos:[],previews:[]};
+function g(id){return document.getElementById(id);}
+function getCat(){return CATS.find(function(c){return c.id === S.cat;});}
 
-g("cgrid").innerHTML=CATS.map(function(c){
-  return '<button class="cb" data-id="'+c.id+'" onclick="pick(''+c.id+'')">'
-    +'<div class="ci">'+c.tag+'</div>'
-    +'<div class="cl">'+c.label+'</div>'
-    +'<div class="cc">'+c.min+'+ photos</div>'
-    +'</button>';
-}).join("");
-
-function pick(id){
-  S.cat=id;
-  document.querySelectorAll(".cb").forEach(function(b){b.classList.toggle("sel",b.dataset.id===id)});
-  g("bn1").disabled=false;
+// Build category grid
+var gridHTML = "";
+for(var ci=0; ci<CATS.length; ci++){
+  var cat = CATS[ci];
+  gridHTML += "<button class=\"cb\" data-catid=\"" + cat.id + "\">"
+    + "<div class=\"ci\">" + cat.tag + "</div>"
+    + "<div class=\"cl\">" + cat.label + "</div>"
+    + "<div class=\"cc\">" + cat.min + "+ photos</div>"
+    + "</button>";
 }
+g("cgrid").innerHTML = gridHTML;
+
+// Category click via event delegation - no inline onclick needed
+g("cgrid").addEventListener("click", function(e){
+  var btn = e.target.closest(".cb");
+  if(!btn) return;
+  S.cat = btn.dataset.catid;
+  document.querySelectorAll(".cb").forEach(function(b){b.classList.toggle("sel", b.dataset.catid === S.cat);});
+  g("bn1").disabled = false;
+});
 
 function go(p){
-  ["cat","det","photos","results"].forEach(function(x){g("p-"+x).classList.toggle("hidden",x!==p)});
-  var m={cat:1,det:2,photos:3,results:4},cur=m[p]||1;
-  for(var i=1;i<=4;i++){var el=g("s"+i);el.classList.remove("active","done");if(i===cur)el.classList.add("active");else if(i<cur)el.classList.add("done");}
-  if(p==="photos"){var c=cat();if(c){g("mnt").textContent=c.min;shots(c)}upd();}
+  ["cat","det","photos","results"].forEach(function(x){g("p-"+x).classList.toggle("hidden", x!==p);});
+  var m = {cat:1,det:2,photos:3,results:4};
+  var cur = m[p] || 1;
+  for(var i=1; i<=4; i++){
+    var el = g("s"+i);
+    el.classList.remove("active","done");
+    if(i===cur) el.classList.add("active");
+    else if(i<cur) el.classList.add("done");
+  }
+  if(p==="photos"){var c=getCat();if(c){g("mnt").textContent=c.min;renderShots(c);}upd();}
 }
 
-function shots(c){
-  var all=c.req.concat(c.bon||[]);
-  g("slist").innerHTML=all.map(function(s,i){
-    var ok=S.photos.length>i;
-    return '<div class="si"><div class="sc'+(ok?" ok":"")+'>'+(ok?"&#10003;":"")+'</div><span>'+s+(i>=c.req.length?' <span style="color:var(--t3);font-size:11px">(bonus)</span>':'')+'</span></div>';
-  }).join("");
+function renderShots(c){
+  var all = c.req.concat(c.bon||[]);
+  var h = "";
+  for(var i=0;i<all.length;i++){
+    var ok = S.photos.length > i;
+    var bonus = i >= c.req.length ? " <span style=\"color:var(--t3);font-size:11px\">(bonus)</span>" : "";
+    h += "<div class=\"si\"><div class=\"sc" + (ok ? " ok" : "") + "\">" + (ok ? "&#10003;" : "") + "</div><span>" + all[i] + bonus + "</span></div>";
+  }
+  g("slist").innerHTML = h;
 }
 
 function addFiles(files){
-  var c=cat(),max=c?c.min+5:10;
-  Array.from(files).slice(0,max-S.photos.length).forEach(function(f){
+  var c = getCat();
+  var max = c ? c.min+5 : 10;
+  var arr = Array.from(files).slice(0, max - S.photos.length);
+  arr.forEach(function(f){
     S.photos.push(f);
-    var r=new FileReader();
-    r.onload=function(e){S.previews.push(e.target.result);grid();upd();};
-    r.readAsDataURL(f);
+    var reader = new FileReader();
+    reader.onload = function(e){ S.previews.push(e.target.result); renderGrid(); upd(); };
+    reader.readAsDataURL(f);
   });
 }
 
-function grid(){
-  g("pgrid").innerHTML=S.previews.map(function(src,i){
-    return '<div class="thumb"><img src="'+src+'"><button class="trm" onclick="rm('+i+')">x</button></div>';
-  }).join("");
-  var n=S.previews.length;
-  g("pcnt").style.display=n>0?"block":"none";
-  g("pnum").textContent=n;
-  var c=cat();if(c)shots(c);
+function renderGrid(){
+  var h = "";
+  for(var i=0;i<S.previews.length;i++){
+    h += "<div class=\"thumb\"><img src=\"" + S.previews[i] + "\"><button class=\"trm\" data-idx=\"" + i + "\">x</button></div>";
+  }
+  g("pgrid").innerHTML = h;
+  g("pcnt").style.display = S.previews.length > 0 ? "block" : "none";
+  g("pnum").textContent = S.previews.length;
+  var c = getCat(); if(c) renderShots(c);
 }
 
-function rm(i){S.photos.splice(i,1);S.previews.splice(i,1);grid();upd();}
-function upd(){g("bna").disabled=S.photos.length<1;}
+g("pgrid").addEventListener("click", function(e){
+  var btn = e.target.closest(".trm");
+  if(!btn) return;
+  var i = parseInt(btn.dataset.idx);
+  S.photos.splice(i,1); S.previews.splice(i,1); renderGrid(); upd();
+});
 
-function collab(){
-  var combo=(S.brand+" "+S.model).toLowerCase();
-  for(var i=0;i<COLS.length;i++){var c=COLS[i],h=0;for(var j=0;j<c.b.length;j++){if(combo.indexOf(c.b[j])!==-1)h++;}if(h>=2)return c.n;}
+function upd(){g("bna").disabled = S.photos.length < 1;}
+
+function detectCollab(){
+  var combo = (S.brand + " " + S.model).toLowerCase();
+  for(var i=0;i<COLS.length;i++){
+    var c=COLS[i], h=0;
+    for(var j=0;j<c.b.length;j++){if(combo.indexOf(c.b[j])!==-1)h++;}
+    if(h>=2) return c.n;
+  }
   return null;
 }
 
@@ -233,114 +260,114 @@ function analyze(){
   g("ldg").classList.remove("hidden");
   g("rout").classList.add("hidden");
   g("brst").classList.add("hidden");
-  var c=cat(),col=collab();
-  var sys="You are Auth Studio Pro, an expert AI authenticator for streetwear and sneakers."
-    +(col?" NOTE: This is "+col+" - heavily counterfeited, apply maximum scrutiny.":"")
-    +" Analyze the photos and give a definitive verdict."
-    +" RESPOND IN THIS EXACT FORMAT:
-VERDICT: [AUTHENTIC/REPLICA/INCONCLUSIVE]
-CONFIDENCE: [0-100]%
-SUMMARY: [2-3 sentence overview]
-CHECKS:
-- [+] [point]: [finding]
-- [-] [point]: [finding]
-- [+] [point]: [finding]
-- [-] [point]: [finding]
-- [+] [point]: [finding]
-RED FLAGS:
-- [flag or None identified]
-RECOMMENDATION: [actionable advice]
-Be direct. Resellers depend on accurate verdicts.";
-  var content=S.previews.map(function(p){
-    return{type:"image",source:{type:"base64",media_type:p.split(";")[0].split(":")[1],data:p.split(",")[1]}};
-  });
-  content.push({type:"text",text:"Authenticate this "+(c?c.label:"item")+". Brand: "+(S.brand||"Unknown")+". Model: "+(S.model||"Unknown")+(S.color?". Colorway: "+S.color:"")+(S.price?". Price: "+S.price:"")+". "+S.previews.length+" photo(s) provided."});
+  var c = getCat();
+  var col = detectCollab();
+  var sys = "You are Auth Studio Pro, an expert AI authenticator for streetwear and sneakers."
+    + (col ? " NOTE: This is " + col + " - heavily counterfeited, apply maximum scrutiny." : "")
+    + " Analyze the photos and give a definitive verdict."
+    + " RESPOND IN THIS EXACT FORMAT:\nVERDICT: [AUTHENTIC/REPLICA/INCONCLUSIVE]\nCONFIDENCE: [0-100]%\nSUMMARY: [2-3 sentence overview]\nCHECKS:\n- [+] [point]: [finding]\n- [-] [point]: [finding]\n- [+] [point]: [finding]\n- [-] [point]: [finding]\n- [+] [point]: [finding]\nRED FLAGS:\n- [flag or None identified]\nRECOMMENDATION: [actionable advice]\nBe direct.";
+  var content = [];
+  for(var i=0;i<S.previews.length;i++){
+    var p = S.previews[i];
+    content.push({type:"image",source:{type:"base64",media_type:p.split(";")[0].split(":")[1],data:p.split(",")[1]}});
+  }
+  content.push({type:"text",text:"Authenticate this " + (c?c.label:"item") + ". Brand: " + (S.brand||"Unknown") + ". Model: " + (S.model||"Unknown") + (S.color?". Colorway: "+S.color:"") + (S.price?". Price: "+S.price:"") + ". " + S.previews.length + " photos provided."});
   fetch("/api/authenticate",{
-    method:"POST",headers:{"Content-Type":"application/json"},
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
     body:JSON.stringify({messages:[{role:"user",content:content}],system:sys})
   }).then(function(r){return r.json();}).then(function(d){
-    var t="";(d.content||[]).forEach(function(b){if(b.type==="text")t+=b.text;});
-    render(t);
-  }).catch(function(e){err(e.message);});
+    var t = "";
+    (d.content||[]).forEach(function(b){if(b.type==="text")t+=b.text;});
+    renderResult(t);
+  }).catch(function(e){renderError(e.message);});
 }
 
-function fld(t,f){var m=t.match(new RegExp(f+":\s*(.+?)(?=\n[A-Z ]+:|$)","si"));return m?m[1].trim():"";}
+function fld(t,f){
+  var m = t.match(new RegExp(f+":\\s*(.+?)(?=\\n[A-Z ]+:|$)","si"));
+  return m ? m[1].trim() : "";
+}
 
-function render(t){
+function renderResult(t){
   g("ldg").classList.add("hidden");
-  var v=fld(t,"VERDICT").toUpperCase().replace(/[^A-Z]/g,"");
-  if(v!=="AUTHENTIC"&&v!=="REPLICA")v="INCONCLUSIVE";
-  var conf=parseInt(fld(t,"CONFIDENCE"))||0;
-  var summ=fld(t,"SUMMARY"),rec=fld(t,"RECOMMENDATION");
-  var cm=t.match(/CHECKS:
-([sS]*?)(?=
-RED FLAGS:|$)/i);
-  var chks=cm?cm[1].split("
-").map(function(l){return l.trim();}).filter(function(l){return l.length>3&&l[0]==="-";}):[];
-  var fm=t.match(/RED FLAGS:
-([sS]*?)(?=
-RECOMMENDATION:|$)/i);
-  var flgs=fm?fm[1].split("
-").map(function(l){return l.trim();}).filter(function(l){return l.length>2;}):[];
-  var vc=v==="AUTHENTIC"?"a":v==="REPLICA"?"r":"i";
-  var vd=v==="AUTHENTIC"?"Authentic":v==="REPLICA"?"Replica":"Inconclusive";
-  var vl=v==="AUTHENTIC"?"Verified Authentic":v==="REPLICA"?"Counterfeit Detected":"Needs More Photos";
-  var circ=2*Math.PI*35,dash=circ-(conf/100)*circ;
-  var html='<div class="vb v'+(vc==="a"?"a":vc==="r"?"r":"i")+'">'
-    +'<div><div class="vl">'+vl+'</div><div class="vt">'+vd+'</div>'
-    +'<div style="margin-top:6px;font-size:13px;color:var(--t2)">'+(S.brand||"")+(S.model?" "+S.model:"")+'</div></div>'
-    +'<div class="cr"><svg viewBox="0 0 80 80" width="80" height="80">'
-    +'<circle class="rb" cx="40" cy="40" r="35" stroke-dasharray="'+circ+'" stroke-dashoffset="0"/>'
-    +'<circle class="r'+(vc==="a"?"a":vc==="r"?"r2":"i")+'" cx="40" cy="40" r="35" stroke-dasharray="'+circ+'" stroke-dashoffset="'+dash+'" style="transition:stroke-dashoffset 1s ease"/>'
-    +'</svg><div class="cn">'+conf+'%</div></div></div>'
-    +'<div class="rbody">';
-  if(summ)html+='<div class="rs"><div class="rst">Summary</div><div class="rtx">'+summ+'</div></div>';
-  if(chks.length)html+='<div class="rs"><div class="rst">Authentication Checks</div><div class="ckg">'
-    +chks.map(function(c){
-      var pass=/^s*-s*[?+/.test(c);
-      return'<div class="cki"><div class="cko" style="color:'+(pass?"var(--ac)":"var(--re)")+'">'+(pass?"[+]":"[-]")+'</div><div class="ckd">'+c.replace(/^[-s[]+xX]+/,"").trim()+'</div></div>';
-    }).join("")+'</div></div>';
-  if(flgs.length&&!(flgs.length===1&&/none/i.test(flgs[0])))html+='<div class="rs"><div class="rst">Red Flags</div><div class="fl">'
-    +flgs.map(function(f){return'<div class="fi"><div class="fd"></div><span>'+f.replace(/^[-s*]+/,"").trim()+'</span></div>';}).join("")+'</div></div>';
-  if(rec)html+='<div class="rs"><div class="rst">Recommendation</div><div class="rec'+(vc==="r"?" rep":vc==="i"?" inc":"")+'" >'+rec+'</div></div>';
-  html+='</div>';
-  var el=g("rout");
-  el.innerHTML=html;el.className="rc";el.classList.remove("hidden");
+  var v = fld(t,"VERDICT").toUpperCase().replace(/[^A-Z]/g,"");
+  if(v!=="AUTHENTIC" && v!=="REPLICA") v="INCONCLUSIVE";
+  var conf = parseInt(fld(t,"CONFIDENCE"))||0;
+  var summ = fld(t,"SUMMARY");
+  var rec = fld(t,"RECOMMENDATION");
+  var cm = t.match(/CHECKS:\n([\s\S]*?)(?=\nRED FLAGS:|$)/i);
+  var chks = cm ? cm[1].split("\n").map(function(l){return l.trim();}).filter(function(l){return l.length>3 && l[0]==="-";}) : [];
+  var fm = t.match(/RED FLAGS:\n([\s\S]*?)(?=\nRECOMMENDATION:|$)/i);
+  var flgs = fm ? fm[1].split("\n").map(function(l){return l.trim();}).filter(function(l){return l.length>2;}) : [];
+  var vc = v==="AUTHENTIC"?"a":v==="REPLICA"?"r":"i";
+  var vd = v==="AUTHENTIC"?"Authentic":v==="REPLICA"?"Replica":"Inconclusive";
+  var vl = v==="AUTHENTIC"?"Verified Authentic":v==="REPLICA"?"Counterfeit Detected":"Needs More Photos";
+  var circ = 2*Math.PI*35;
+  var dash = circ - (conf/100)*circ;
+  var h = "<div class=\"vb v" + (vc==="a"?"a":vc==="r"?"r":"i") + "\">"
+    + "<div><div class=\"vl\">" + vl + "</div><div class=\"vt\">" + vd + "</div>"
+    + "<div style=\"margin-top:6px;font-size:13px;color:var(--t2)\">" + (S.brand||"") + (S.model?" "+S.model:"") + "</div></div>"
+    + "<div class=\"cr\"><svg viewBox=\"0 0 80 80\" width=\"80\" height=\"80\">"
+    + "<circle class=\"rb\" cx=\"40\" cy=\"40\" r=\"35\" stroke-dasharray=\"" + circ + "\" stroke-dashoffset=\"0\"/>"
+    + "<circle class=\"r" + (vc==="a"?"a":vc==="r"?"r2":"i") + "\" cx=\"40\" cy=\"40\" r=\"35\" stroke-dasharray=\"" + circ + "\" stroke-dashoffset=\"" + dash + "\" style=\"transition:stroke-dashoffset 1s ease\"/>"
+    + "</svg><div class=\"cn\">" + conf + "%</div></div></div>"
+    + "<div class=\"rbody\">";
+  if(summ) h += "<div class=\"rs\"><div class=\"rst\">Summary</div><div class=\"rtx\">" + summ + "</div></div>";
+  if(chks.length){
+    h += "<div class=\"rs\"><div class=\"rst\">Authentication Checks</div><div class=\"ckg\">";
+    for(var i=0;i<chks.length;i++){
+      var pass = /^\s*-\s*\[?\+/.test(chks[i]);
+      h += "<div class=\"cki\"><div class=\"cko\" style=\"color:" + (pass?"var(--ac)":"var(--re)") + "\">" + (pass?"[+]":"[-]") + "</div><div class=\"ckd\">" + chks[i].replace(/^[-\s\[\]+xX]+/,"").trim() + "</div></div>";
+    }
+    h += "</div></div>";
+  }
+  if(flgs.length && !(flgs.length===1 && /none/i.test(flgs[0]))){
+    h += "<div class=\"rs\"><div class=\"rst\">Red Flags</div><div class=\"fl\">";
+    for(var i=0;i<flgs.length;i++){
+      h += "<div class=\"fi\"><div class=\"fd\"></div><span>" + flgs[i].replace(/^[-\s*]+/,"").trim() + "</span></div>";
+    }
+    h += "</div></div>";
+  }
+  if(rec) h += "<div class=\"rs\"><div class=\"rst\">Recommendation</div><div class=\"rec" + (vc==="r"?" rep":vc==="i"?" inc":"") + "\">" + rec + "</div></div>";
+  h += "</div>";
+  var el = g("rout");
+  el.innerHTML = h; el.className = "rc"; el.classList.remove("hidden");
   g("brst").classList.remove("hidden");
   el.scrollIntoView({behavior:"smooth",block:"start"});
 }
 
-function err(msg){
+function renderError(msg){
   g("ldg").classList.add("hidden");
-  var el=g("rout");
-  el.innerHTML='<div style="padding:32px;text-align:center">'
-    +'<div style="font-size:32px;margin-bottom:12px">!</div>'
-    +'<div style="font-family:Space Mono,monospace;font-size:13px;color:var(--re);margin-bottom:8px">ANALYSIS FAILED</div>'
-    +'<div style="font-size:14px;color:var(--t2)">'+msg+'</div></div>';
-  el.classList.remove("hidden");
+  g("rout").innerHTML = "<div style=\"padding:32px;text-align:center\"><div style=\"font-size:13px;color:var(--re);font-family:Space Mono,monospace;margin-bottom:8px\">ANALYSIS FAILED</div><div style=\"font-size:14px;color:var(--t2)\">" + msg + "</div></div>";
+  g("rout").classList.remove("hidden");
   g("brst").classList.remove("hidden");
 }
 
-function reset(){
-  S={cat:null,brand:"",model:"",color:"",price:"",photos:[],previews:[]};
+function resetAll(){
+  S = {cat:null,brand:"",model:"",color:"",price:"",photos:[],previews:[]};
   ["fb","fm","fc","fp"].forEach(function(id){g(id).value="";});
-  g("pgrid").innerHTML="";g("fi").value="";
+  g("pgrid").innerHTML = "";
+  g("fi").value = "";
   document.querySelectorAll(".cb").forEach(function(b){b.classList.remove("sel");});
-  g("bn1").disabled=true;go("cat");
+  g("bn1").disabled = true;
+  go("cat");
 }
 
-g("bn1").addEventListener("click",function(){go("det");});
-g("bk1").addEventListener("click",function(){go("cat");});
-g("bn2").addEventListener("click",function(){S.brand=g("fb").value;S.model=g("fm").value;S.color=g("fc").value;S.price=g("fp").value;go("photos");});
-g("bk2").addEventListener("click",function(){go("det");});
-g("bna").addEventListener("click",analyze);
-g("brst").addEventListener("click",reset);
-g("fi").addEventListener("change",function(e){addFiles(e.target.files);});
-var dz=g("dz");
-dz.addEventListener("dragover",function(e){e.preventDefault();dz.classList.add("drag");});
-dz.addEventListener("dragleave",function(){dz.classList.remove("drag");});
-dz.addEventListener("drop",function(e){
-  e.preventDefault();dz.classList.remove("drag");
+g("bn1").addEventListener("click", function(){go("det");});
+g("bk1").addEventListener("click", function(){go("cat");});
+g("bn2").addEventListener("click", function(){
+  S.brand=g("fb").value; S.model=g("fm").value; S.color=g("fc").value; S.price=g("fp").value;
+  go("photos");
+});
+g("bk2").addEventListener("click", function(){go("det");});
+g("bna").addEventListener("click", analyze);
+g("brst").addEventListener("click", resetAll);
+g("fi").addEventListener("change", function(e){addFiles(e.target.files);});
+var dz = g("dz");
+dz.addEventListener("dragover", function(e){e.preventDefault(); dz.classList.add("drag");});
+dz.addEventListener("dragleave", function(){dz.classList.remove("drag");});
+dz.addEventListener("drop", function(e){
+  e.preventDefault(); dz.classList.remove("drag");
   addFiles(Array.from(e.dataTransfer.files).filter(function(f){return f.type.startsWith("image/");}));
 });
 </script>
