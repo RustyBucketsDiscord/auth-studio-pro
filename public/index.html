@@ -1,654 +1,257 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Auth Studio Pro — AI Authentication</title>
-  <meta name="description" content="AI-powered streetwear and sneaker authentication. Legit check any item with 90%+ confidence.">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔬</text></svg>">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.6/babel.min.js"></script>
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { background: #0a0a0a; color: #fff; font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif; -webkit-font-smoothing: antialiased; }
-    input:focus { outline: none; }
-    button { font-family: inherit; }
-    @keyframes scanMove { 0%,100% { top: 0; } 50% { top: 100%; } }
-    @keyframes verdictPop { 0% { transform: scale(0); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
-    @keyframes fadeSlide { 0% { opacity:0; transform:translateX(-10px); } 100% { opacity:1; transform:translateX(0); } }
-    @keyframes pulse { 0%,100% { opacity: 0.5; } 50% { opacity: 1; } }
-    ::-webkit-scrollbar { width: 6px; }
-    ::-webkit-scrollbar-track { background: #111; }
-    ::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<title>Auth Studio Pro - AI Authentication</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#0a0a0a;--s1:#111;--s2:#1a1a1a;--bd:#2a2a2a;--ac:#00ff88;--re:#ff3355;--ye:#ffcc00;--tx:#fff;--t2:#888;--t3:#555;--rr:12px}
+body{background:var(--bg);color:var(--tx);font-family:'DM Sans',sans-serif;min-height:100vh;-webkit-font-smoothing:antialiased}
+.hdr{display:flex;align-items:center;justify-content:space-between;padding:20px 32px;border-bottom:1px solid var(--bd);position:sticky;top:0;background:rgba(10,10,10,.95);backdrop-filter:blur(12px);z-index:100}
+.logo{font-family:'Space Mono',monospace;font-size:16px;font-weight:700;display:flex;align-items:center;gap:10px}
+.dot{width:8px;height:8px;background:var(--ac);border-radius:50%;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.8)}}
+.badge{font-family:'Space Mono',monospace;font-size:11px;color:var(--ac);border:1px solid var(--ac);padding:4px 10px;border-radius:4px;letter-spacing:1px}
+.main{max-width:800px;margin:0 auto;padding:40px 24px}
+.steps{display:flex;align-items:center;gap:8px;margin-bottom:40px}
+.step{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--t3);transition:color .3s}
+.step.active{color:var(--tx)}.step.done{color:var(--ac)}
+.sn{width:26px;height:26px;border-radius:50%;border:1px solid var(--bd);display:flex;align-items:center;justify-content:center;font-family:'Space Mono',monospace;font-size:11px;transition:all .3s}
+.step.active .sn{border-color:var(--tx);background:var(--tx);color:var(--bg)}
+.step.done .sn{border-color:var(--ac);background:var(--ac);color:var(--bg)}
+.sl{flex:1;height:1px;background:var(--bd);max-width:60px}
+.card{background:var(--s1);border:1px solid var(--bd);border-radius:var(--rr);padding:28px;margin-bottom:20px}
+.ct{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:2px;color:var(--t2);text-transform:uppercase;margin-bottom:16px}
+.cgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px}
+.cb{background:var(--s2);border:1px solid var(--bd);border-radius:8px;padding:14px 12px;cursor:pointer;text-align:center;transition:all .2s;color:var(--tx)}
+.cb:hover{border-color:var(--t3)}.cb.sel{border-color:var(--ac);background:rgba(0,255,136,.08)}
+.ci{font-size:22px;margin-bottom:6px}.cl{font-size:13px;font-weight:500}.cc{font-size:11px;color:var(--t2);margin-top:2px}
+.grow{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.ig{display:flex;flex-direction:column;gap:6px}
+.il{font-size:12px;color:var(--t2)}
+.inf{background:var(--s2);border:1px solid var(--bd);border-radius:8px;padding:12px 14px;color:var(--tx);font-size:14px;font-family:'DM Sans',sans-serif;outline:none;transition:border-color .2s;width:100%}
+.inf:focus{border-color:var(--ac)}.inf::placeholder{color:var(--t3)}
+.dz{border:2px dashed var(--bd);border-radius:var(--rr);padding:32px;text-align:center;cursor:pointer;transition:all .2s;position:relative}
+.dz:hover,.dz.drag{border-color:var(--ac);background:rgba(0,255,136,.04)}
+.dz input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:8px;margin-top:14px}
+.thumb{position:relative;aspect-ratio:1;border-radius:8px;overflow:hidden;background:var(--s2);border:1px solid var(--bd)}
+.thumb img{width:100%;height:100%;object-fit:cover}
+.trm{position:absolute;top:4px;right:4px;width:20px;height:20px;background:rgba(0,0,0,.8);border:none;border-radius:50%;color:#fff;font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.slist{display:flex;flex-direction:column;gap:6px;margin-top:10px}
+.si{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--t2)}
+.sc{width:18px;height:18px;border-radius:4px;border:1px solid var(--bd);display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0}
+.sc.ok{border-color:var(--ac);background:rgba(0,255,136,.15);color:var(--ac)}
+.btn1{width:100%;padding:18px;background:var(--ac);color:var(--bg);border:none;border-radius:var(--rr);font-family:'Space Mono',monospace;font-size:14px;font-weight:700;letter-spacing:1px;cursor:pointer;transition:all .2s;margin-top:8px}
+.btn1:hover:not(:disabled){transform:translateY(-1px);box-shadow:0 8px 24px rgba(0,255,136,.3)}
+.btn1:disabled{opacity:.4;cursor:not-allowed}
+.btn2{width:100%;padding:14px;background:transparent;color:var(--t2);border:1px solid var(--bd);border-radius:var(--rr);font-family:'Space Mono',monospace;font-size:13px;cursor:pointer;transition:all .2s;margin-top:8px}
+.btn2:hover{border-color:var(--t2);color:var(--tx)}
+.ld{text-align:center;padding:48px 24px}
+.sp{width:48px;height:48px;border:2px solid var(--bd);border-top-color:var(--ac);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 20px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.lt{font-family:'Space Mono',monospace;font-size:13px;color:var(--t2);letter-spacing:1px}
+.ld-dt::after{content:'';animation:dt 1.5s infinite}
+@keyframes dt{0%{content:''}33%{content:'.'}66%{content:'..'}100%{content:'...'}}
+.rc{background:var(--s1);border:1px solid var(--bd);border-radius:var(--rr);overflow:hidden;animation:up .4s ease}
+@keyframes up{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.vb{padding:28px 32px;display:flex;align-items:center;justify-content:space-between}
+.va{background:rgba(0,255,136,.12);border-bottom:1px solid rgba(0,255,136,.3)}
+.vr{background:rgba(255,51,85,.12);border-bottom:1px solid rgba(255,51,85,.3)}
+.vi{background:rgba(255,204,0,.08);border-bottom:1px solid rgba(255,204,0,.2)}
+.vl{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:3px;text-transform:uppercase;margin-bottom:6px}
+.va .vl{color:var(--ac)}.vr .vl{color:var(--re)}.vi .vl{color:var(--ye)}
+.vt{font-size:28px;font-weight:700;letter-spacing:-.5px}
+.cr{width:80px;height:80px;position:relative;flex-shrink:0}
+.cr svg{transform:rotate(-90deg)}
+.cr circle{fill:none;stroke-width:5;stroke-linecap:round}
+.rb{stroke:var(--bd)}.ra{stroke:var(--ac)}.rr2{stroke:var(--re)}.ri{stroke:var(--ye)}
+.cn{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'Space Mono',monospace;font-size:16px;font-weight:700}
+.rbody{padding:28px 32px}
+.rs{margin-bottom:24px}
+.rst{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:2px;color:var(--t3);text-transform:uppercase;margin-bottom:10px}
+.rtx{font-size:15px;line-height:1.7;color:var(--t2)}
+.ckg{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.cki{display:flex;align-items:flex-start;gap:10px;background:var(--s2);border-radius:8px;padding:12px;font-size:13px}
+.cko{font-size:14px;flex-shrink:0;margin-top:1px}
+.ckd{color:var(--t2);line-height:1.4}
+.fl{display:flex;flex-direction:column;gap:8px}
+.fi{display:flex;align-items:flex-start;gap:10px;background:rgba(255,51,85,.06);border:1px solid rgba(255,51,85,.15);border-radius:8px;padding:12px;font-size:13px;color:var(--t2)}
+.fd{width:6px;height:6px;border-radius:50%;background:var(--re);flex-shrink:0;margin-top:5px}
+.rec{background:var(--s2);border-radius:8px;padding:16px;font-size:14px;line-height:1.6;color:var(--tx);border-left:3px solid var(--ac)}
+.rec.rep{border-left-color:var(--re)}.rec.inc{border-left-color:var(--ye)}
+.hidden{display:none!important}
+@media(max-width:600px){.hdr{padding:16px 20px}.main{padding:24px 16px}.grow{grid-template-columns:1fr}.ckg{grid-template-columns:1fr}.vb{flex-direction:column;gap:20px;align-items:flex-start}.rbody{padding:20px}}
+</style>
 </head>
 <body>
-<div id="root"></div>
-<script type="text/babel">
-const { useState, useRef, useCallback } = React;
-
-// ===========================================
-// DATA
-// ===========================================
-const CATEGORIES = [
-{ id: "sneakers", label: "Sneakers", icon: "", minPhotos: 5, requiredShots: ["Both shoes side profile", "Toe box front-on", "Heel tab close-up", "Tongue tag (readable)", "Outsole tread"], bonusShots: ["Insole removed", "Box label / SKU", "Interior heel stitching", "Lace aglets", "Midsole edge"] },
-{ id: "hoodies", label: "Hoodies / Jackets", icon: "", minPhotos: 4, requiredShots: ["Front flat lay", "Back flat lay", "Neck/collar tag", "Print or embroidery close-up"], bonusShots: ["Inner care tag", "Side seam stitching", "Zipper pull", "Cuffs", "Hood lining"] },
-{ id: "tops", label: "Tops / T-Shirts", icon: "", minPhotos: 3, requiredShots: ["Front flat lay", "Neck tag", "Print close-up"], bonusShots: ["Back flat lay", "Hem stitching", "Sleeve seam", "Side tag"] },
-{ id: "bottoms", label: "Bottoms / Joggers", icon: "", minPhotos: 4, requiredShots: ["Front flat lay", "Back flat lay", "Waistband inner tag", "Ankle cuff"], bonusShots: ["Drawstring aglets", "Inseam stitching", "Pocket lining", "Embroidery close-up"] },
-{ id: "sets", label: "Full Sets", icon: "", minPhotos: 5, requiredShots: ["Set laid flat together", "Top tag", "Bottom tag", "Color match close-up", "Logo on each piece"], bonusShots: ["Stitching comparison", "Set hanging together", "Interior of both pieces"] },
-{ id: "accessories", label: "Accessories / Bags", icon: "", minPhotos: 5, requiredShots: ["Full front", "Full back", "Hardware close-up", "Interior lining", "Interior brand label"], bonusShots: ["Zipper pull branding", "Serial/date code", "Strap hardware", "Dust bag", "Auth card"] },
+<header class="hdr">
+  <div class="logo"><div class="dot"></div>AUTH STUDIO PRO</div>
+  <div class="badge">BETA</div>
+</header>
+<main class="main">
+  <div class="steps">
+    <div class="step active" id="s1"><div class="sn">1</div><span>Category</span></div>
+    <div class="sl"></div>
+    <div class="step" id="s2"><div class="sn">2</div><span>Details</span></div>
+    <div class="sl"></div>
+    <div class="step" id="s3"><div class="sn">3</div><span>Photos</span></div>
+    <div class="sl"></div>
+    <div class="step" id="s4"><div class="sn">4</div><span>Results</span></div>
+  </div>
+  <div id="p-cat">
+    <div class="card"><div class="ct">Select Item Category</div><div class="cgrid" id="cgrid"></div></div>
+    <button class="btn1" id="bn1" disabled>CONTINUE &rarr;</button>
+  </div>
+  <div id="p-det" class="hidden">
+    <div class="card">
+      <div class="ct">Item Details</div>
+      <div class="grow">
+        <div class="ig"><label class="il">BRAND</label><input class="inf" id="fb" placeholder="e.g. Nike, Supreme, Jordan"></div>
+        <div class="ig"><label class="il">MODEL / STYLE</label><input class="inf" id="fm" placeholder="e.g. Air Jordan 1 Retro High OG"></div>
+        <div class="ig"><label class="il">COLORWAY</label><input class="inf" id="fc" placeholder="e.g. Chicago, Bred, Panda"></div>
+        <div class="ig"><label class="il">PURCHASE PRICE (optional)</label><input class="inf" id="fp" placeholder="e.g. $280"></div>
+      </div>
+    </div>
+    <div style="display:flex;gap:10px">
+      <button class="btn2" id="bk1" style="max-width:120px">&larr; BACK</button>
+      <button class="btn1" id="bn2">CONTINUE &rarr;</button>
+    </div>
+  </div>
+  <div id="p-photos" class="hidden">
+    <div class="card">
+      <div class="ct">Upload Photos</div>
+      <div class="dz" id="dz">
+        <input type="file" id="fi" accept="image/*" multiple>
+        <div style="font-size:28px;margin-bottom:8px">&#128247;</div>
+        <div style="font-size:14px;color:var(--t2)">Drop photos here or click to browse</div>
+        <div style="font-size:12px;color:var(--t3);margin-top:4px">At least <span id="mnt">3</span> photos recommended</div>
+      </div>
+      <div class="pgrid" id="pgrid"></div>
+      <div id="pcnt" style="display:none;font-size:12px;color:var(--t2);margin-top:8px"><span id="pnum">0</span> photos selected</div>
+    </div>
+    <div class="card"><div class="ct">Recommended Shots</div><div class="slist" id="slist"></div></div>
+    <div style="display:flex;gap:10px">
+      <button class="btn2" id="bk2" style="max-width:120px">&larr; BACK</button>
+      <button class="btn1" id="bna" disabled>ANALYZE NOW &rarr;</button>
+    </div>
+  </div>
+  <div id="p-results" class="hidden">
+    <div id="ldg" class="card ld">
+      <div class="sp"></div>
+      <div class="lt">ANALYZING AUTHENTICATION<span class="ld-dt"></span></div>
+      <div style="font-size:12px;color:var(--t3);margin-top:8px">Running AI vision analysis &amp; web research</div>
+    </div>
+    <div id="rout" class="rc hidden"></div>
+    <button class="btn2 hidden" id="brst">START NEW AUTHENTICATION</button>
+  </div>
+</main>
+<script>
+var CATS=[
+  {id:"sneakers",label:"Sneakers",e:"&#128095;",min:5,req:["Both shoes side profile","Toe box front-on","Heel tab close-up","Tongue tag (readable)","Outsole tread"],bon:["Insole removed","Box label/SKU","Interior heel stitching","Lace aglets","Midsole edge"]},
+  {id:"hoodies",label:"Hoodies/Jackets",e:"&#129405;",min:4,req:["Front flat lay","Back flat lay","Neck/collar tag","Print or embroidery close-up"],bon:["Inner care tag","Side seam stitching","Zipper pull","Cuffs","Hood lining"]},
+  {id:"tops",label:"Tops/T-Shirts",e:"&#128255;",min:3,req:["Front flat lay","Neck tag","Print close-up"],bon:["Back flat lay","Hem stitching","Sleeve seam","Side tag"]},
+  {id:"bottoms",label:"Bottoms/Joggers",e:"&#128248;",min:4,req:["Front flat lay","Back flat lay","Waistband inner tag","Ankle cuff"],bon:["Drawstring aglets","Inseam stitching","Pocket lining","Embroidery close-up"]},
+  {id:"sets",label:"Full Sets",e:"&#128248;",min:5,req:["Set laid flat together","Top tag","Bottom tag","Color match close-up","Logo on each piece"],bon:["Stitching comparison","Set hanging","Care label","Waistband detail"]},
+  {id:"accessories",label:"Accessories",e:"&#127890;",min:3,req:["Front view","Back view","Brand markings close-up"],bon:["Hardware detail","Stitching","Lining","Tags/labels"]}
 ];
-
-const BRANDS = [
-"Nike", "Jordan", "Adidas", "Yeezy", "New Balance", "Supreme", "BAPE", "Off-White",
-"Fear of God Essentials", "Trapstar", "Palm Angels", "Gallery Dept.", "Sp5der", "Hellstar",
-"Corteiz", "Denim Tears", "Stussy", "Louis Vuitton", "Gucci", "Balenciaga", "Dior",
-"Prada", "Chrome Hearts", "Vivienne Westwood", "Other"
+var COLS=[
+  {b:["nike","nocta"],n:"Nike x NOCTA"},
+  {b:["jordan","travis scott"],n:"Jordan x Travis Scott"},
+  {b:["jordan","off-white"],n:"Jordan x Off-White"},
+  {b:["adidas","yeezy"],n:"Adidas Yeezy"},
+  {b:["nike","off-white"],n:"Nike x Off-White"},
+  {b:["new balance","joe freshgoods"],n:"New Balance x Joe Freshgoods"},
+  {b:["adidas","bad bunny"],n:"Adidas x Bad Bunny"}
 ];
-
-const COLLAB_PARTNERS = [
-{ id: "nocta", label: "NOCTA (Drake)", brands: ["Nike"] },
-{ id: "travis_scott", label: "Travis Scott / Cactus Jack", brands: ["Nike", "Jordan"] },
-{ id: "union_la", label: "Union LA", brands: ["Nike", "Jordan"] },
-{ id: "a_ma_maniere", label: "A Ma Maniere", brands: ["Nike", "Jordan"] },
-{ id: "off_white", label: "Off-White (Virgil)", brands: ["Nike", "Jordan"] },
-{ id: "stussy_collab", label: "Stussy", brands: ["Nike"] },
-{ id: "ambush", label: "AMBUSH", brands: ["Nike"] },
-{ id: "sacai", label: "sacai", brands: ["Nike"] },
-{ id: "patta", label: "Patta", brands: ["Nike"] },
-{ id: "clot", label: "CLOT", brands: ["Nike"] },
-{ id: "fog_collab", label: "Fear of God", brands: ["Nike", "Adidas"] },
-{ id: "yeezy_gap", label: "GAP", brands: ["Yeezy"] },
-{ id: "pharrell", label: "Pharrell / HU", brands: ["Adidas"] },
-{ id: "bad_bunny", label: "Bad Bunny", brands: ["Adidas"] },
-{ id: "palace", label: "Palace", brands: ["Adidas"] },
-{ id: "bape_collab", label: "BAPE", brands: ["Adidas"] },
-{ id: "north_face", label: "The North Face", brands: ["Supreme", "Gucci"] },
-{ id: "lv_collab", label: "Louis Vuitton", brands: ["Supreme", "Nike"] },
-{ id: "dior_collab", label: "Dior", brands: ["Nike", "Jordan"] },
-{ id: "tiffany", label: "Tiffany & Co.", brands: ["Nike"] },
-{ id: "supreme_collab", label: "Supreme", brands: ["Nike", "Louis Vuitton", "BAPE", "Denim Tears"] },
-{ id: "chrome_hearts_collab", label: "Chrome Hearts", brands: ["Off-White"] },
-{ id: "cpfm", label: "Cactus Plant Flea Market", brands: ["Nike"] },
-{ id: "kaws", label: "KAWS", brands: ["Jordan"] },
-{ id: "other_collab", label: "Other Collab", brands: [] },
-];
-
-const AUTH_SYSTEM_PROMPT = `You are an elite streetwear and sneaker authentication specialist operating at the level of StockX's top-tier authenticators, GOAT's specialist team, and Legit Check Club's expert reviewers. You have authenticated tens of thousands of items across Nike, Jordan, Adidas, Yeezy, Supreme, BAPE, Off-White, Fear of God Essentials, Trapstar, Palm Angels, Gallery Dept., Sp5der, Hellstar, Corteiz, Denim Tears, and all major luxury brands including Louis Vuitton, Gucci, Balenciaga, Dior, and Prada.
-
-Your authentication standard is calibrated for a professional reselling operation. You are the FINAL AUTHORITY before items are listed on premium platforms.
-
-VERDICT CALIBRATION - STRICT THRESHOLD:
-
-- AUTHENTIC (90-100%): This item passes every checkpoint. Safe to sell on StockX, GOAT, eBay Authenticity Guarantee, Grailed at full market price. You would stake your professional reputation on this verdict.
-- INCONCLUSIVE (70-89%): Photos show mostly authentic indicators but evidence is insufficient for a definitive verdict. Recommend additional photos or professional in-hand authentication.
-- REPLICA (0-69%): One or more clear indicators of non-authentic production detected. Do NOT sell as authentic.
-
-CRITICAL RULES:
-
-1. You ONLY issue "AUTHENTIC" at 90-100%. This means "list this item for sale right now."
-1. You must find AT LEAST 3 strong authentication points that all pass before giving 90%+.
-1. If ANY single checkpoint fails, the item CANNOT score above 89%.
-1. A 90% score requires BOTH photo evidence AND your knowledge that known replica batches have tells you do NOT see.
-1. Be brutally specific. Name exact tells. Reference measurements and specs where visible.
-
-YOUR AUTHENTICATION PROCESS:
-
-1. WEB RESEARCH FIRST: Use web_search to find current fake batch tells, authentication checkpoints, retail vs resale price, and replica quality reports.
-1. PHOTO ANALYSIS - check every visible detail: STITCHING, TAGS, MATERIALS, LOGOS, HARDWARE, SHAPE, COLOR
-1. BRAND-SPECIFIC DEEP CHECKS per brand knowledge base
-1. COLLABORATION AUTHENTICATION (if collab): Check co-branding, dual tags, special packaging, collab SKU formats, special materials, price validation
-1. CONFIDENCE SCORING: Never 90%+ unless 3+ strong points pass with zero fails
-
-OUTPUT FORMAT - respond ONLY in this exact JSON, no preamble, no markdown fences:
-{
-"verdict": "AUTHENTIC" | "INCONCLUSIVE" | "REPLICA",
-"confidence": <number 0-100>,
-"summary": "<1-2 sentence executive summary>",
-"checkpoints": [{"area":"<checked>","status":"PASS"|"FAIL"|"UNABLE_TO_VERIFY","detail":"<finding>"}],
-"webFindings": "<summary of web research on fakes of this item>",
-"pricingContext": {"retail":"<price>","resale":"<range>","note":"<flags>"},
-"photoQuality": {"score":"SUFFICIENT"|"NEEDS_MORE","missing":["<recommended photos>"]},
-"collabAuthentication": {"isCollab":<true|false>,"collabChecks":[{"check":"<detail>","status":"PASS"|"FAIL"|"UNABLE_TO_VERIFY","detail":"<finding>"}]},
-"recommendation": "<actionable advice>"
-}`;
-
-// ===========================================
-// HELPERS
-// ===========================================
-function fileToBase64(file) {
-return new Promise((resolve, reject) => {
-const reader = new FileReader();
-reader.onload = () => resolve(reader.result.split(",")[1]);
-reader.onerror = () => reject(new Error("Failed to read file"));
-reader.readAsDataURL(file);
-});
+var S={cat:null,brand:"",model:"",color:"",price:"",photos:[],previews:[]};
+function g(id){return document.getElementById(id)}
+function cat(){return CATS.find(function(c){return c.id===S.cat})}
+g("cgrid").innerHTML=CATS.map(function(c){return'<button class="cb" data-id="'+c.id+'" onclick="pick(''+c.id+'')">'+'<div class="ci">'+c.e+'</div><div class="cl">'+c.label+'</div><div class="cc">'+c.min+'+ photos</div></button>';}).join("");
+function pick(id){S.cat=id;document.querySelectorAll(".cb").forEach(function(b){b.classList.toggle("sel",b.dataset.id===id)});g("bn1").disabled=false;}
+function go(p){
+  ["cat","det","photos","results"].forEach(function(x){g("p-"+x).classList.toggle("hidden",x!==p)});
+  var m={cat:1,det:2,photos:3,results:4},cur=m[p]||1;
+  for(var i=1;i<=4;i++){var el=g("s"+i);el.classList.remove("active","done");if(i===cur)el.classList.add("active");else if(i<cur)el.classList.add("done");}
+  if(p==="photos"){var c=cat();if(c){g("mnt").textContent=c.min;shots(c)}upd();}
 }
-
-// ===========================================
-// SUB-COMPONENTS
-// ===========================================
-function ScanLine({ active }) {
-if (!active) return null;
-return React.createElement("div", { style: { position: "absolute", top: 0, left: 0, right: 0, bottom: 0, overflow: "hidden", borderRadius: 12, pointerEvents: "none", zIndex: 10 } },
-React.createElement("div", { style: { position: "absolute", left: 0, right: 0, height: 3, background: "linear-gradient(90deg, transparent, #00ff88, #00ffcc, #00ff88, transparent)", boxShadow: "0 0 20px #00ff88, 0 0 60px #00ff8844", animation: "scanMove 2s ease-in-out infinite" } })
-);
+function shots(c){var all=c.req.concat(c.bon||[]);g("slist").innerHTML=all.map(function(s,i){var ok=S.photos.length>i;return'<div class="si"><div class="sc'+(ok?" ok":"")+'>'+(ok?"&#10003;":"")+'</div><span>'+s+(i>=c.req.length?' <span style="color:var(--t3);font-size:11px">(bonus)</span>':'')+'</span></div>';}).join("");}
+function addFiles(files){var c=cat(),max=c?c.min+5:10;Array.from(files).slice(0,max-S.photos.length).forEach(function(f){S.photos.push(f);var r=new FileReader();r.onload=function(e){S.previews.push(e.target.result);grid();upd();};r.readAsDataURL(f);});}
+function grid(){g("pgrid").innerHTML=S.previews.map(function(src,i){return'<div class="thumb"><img src="'+src+'"><button class="trm" onclick="rm('+i+')">&#215;</button></div>';}).join("");var n=S.previews.length;g("pcnt").style.display=n>0?"block":"none";g("pnum").textContent=n;var c=cat();if(c)shots(c);}
+function rm(i){S.photos.splice(i,1);S.previews.splice(i,1);grid();upd();}
+function upd(){g("bna").disabled=S.photos.length<1;}
+function collab(){var combo=(S.brand+" "+S.model).toLowerCase();for(var i=0;i<COLS.length;i++){var c=COLS[i],h=0;for(var j=0;j<c.b.length;j++){if(combo.indexOf(c.b[j])!==-1)h++;}if(h>=2)return c.n;}return null;}
+function analyze(){
+  go("results");g("ldg").classList.remove("hidden");g("rout").classList.add("hidden");g("brst").classList.add("hidden");
+  var c=cat(),col=collab();
+  var sys="You are Auth Studio Pro, an expert AI authenticator for streetwear and sneakers."+(col?" NOTE: This is "+col+" - heavily counterfeited, apply maximum scrutiny.":"")+" Analyze the photos and give a definitive verdict. RESPOND IN THIS EXACT FORMAT:
+VERDICT: [AUTHENTIC/REPLICA/INCONCLUSIVE]
+CONFIDENCE: [0-100]%
+SUMMARY: [2-3 sentence overview]
+CHECKS:
+- [+] [point]: [finding]
+- [-] [point]: [finding]
+- [+] [point]: [finding]
+- [-] [point]: [finding]
+- [+] [point]: [finding]
+RED FLAGS:
+- [flag or None identified]
+RECOMMENDATION: [actionable advice]
+Be direct and confident.";
+  var content=S.previews.map(function(p){return{type:"image",source:{type:"base64",media_type:p.split(";")[0].split(":")[1],data:p.split(",")[1]}};});
+  content.push({type:"text",text:"Authenticate this "+(c?c.label:"item")+". Brand: "+(S.brand||"Unknown")+". Model: "+(S.model||"Unknown")+(S.color?". Colorway: "+S.color:"")+(S.price?". Price: "+S.price:"")+". "+S.previews.length+" photo(s)."});
+  fetch("/api/authenticate",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({messages:[{role:"user",content:content}],system:sys})}).then(function(r){return r.json();}).then(function(d){var t="";(d.content||[]).forEach(function(b){if(b.type==="text")t+=b.text;});render(t);}).catch(function(e){err(e.message);});
 }
-
-function VerdictBadge({ verdict, confidence }) {
-const configs = {
-AUTHENTIC: { bg: "linear-gradient(135deg, #00ff88, #00cc6a)", color: "#000", glow: "#00ff8866", icon: "PASS", label: "AUTHENTIC" },
-INCONCLUSIVE: { bg: "linear-gradient(135deg, #ffaa00, #ff8800)", color: "#000", glow: "#ffaa0066", icon: "?", label: "INCONCLUSIVE" },
-REPLICA: { bg: "linear-gradient(135deg, #ff3355, #cc0033)", color: "#fff", glow: "#ff335566", icon: "FAIL", label: "REPLICA" },
-};
-const c = configs[verdict] || { bg: "#333", color: "#fff", glow: "transparent", icon: "-", label: verdict };
-return (
-<div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 12, animation: "verdictPop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)" }}>
-<div style={{ width: 80, height: 80, borderRadius: "50%", background: c.bg, color: c.color, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 36, fontWeight: 900, boxShadow: `0 0 40px ${c.glow}, 0 0 80px ${c.glow}` }}>{c.icon}</div>
-<div style={{ fontSize: 28, fontWeight: 900, letterSpacing: 4, background: c.bg, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>{c.label}</div>
-<div style={{ fontSize: 48, fontWeight: 900, color: "#fff", lineHeight: 1 }}>{confidence}%</div>
-<div style={{ fontSize: 13, color: "#888", letterSpacing: 2 }}>CONFIDENCE SCORE</div>
-</div>
-);
+function fld(t,f){var m=t.match(new RegExp(f+":\s*(.+?)(?=\n[A-Z ]+:|$)","si"));return m?m[1].trim():"";}
+function render(t){
+  g("ldg").classList.add("hidden");
+  var v=fld(t,"VERDICT").toUpperCase().replace(/[^A-Z]/g,"");
+  if(v!=="AUTHENTIC"&&v!=="REPLICA")v="INCONCLUSIVE";
+  var conf=parseInt(fld(t,"CONFIDENCE"))||0,summ=fld(t,"SUMMARY"),rec=fld(t,"RECOMMENDATION");
+  var cm=t.match(/CHECKS:
+([sS]*?)(?=
+RED FLAGS:|$)/i);
+  var chks=cm?cm[1].split("
+").map(function(l){return l.trim();}).filter(function(l){return l.length>3&&l[0]==="-";}):[];
+  var fm=t.match(/RED FLAGS:
+([sS]*?)(?=
+RECOMMENDATION:|$)/i);
+  var flgs=fm?fm[1].split("
+").map(function(l){return l.trim();}).filter(function(l){return l.length>2;}):[];
+  var vc=v==="AUTHENTIC"?"a":v==="REPLICA"?"r":"i";
+  var vd=v==="AUTHENTIC"?"Authentic":v==="REPLICA"?"Replica":"Inconclusive";
+  var vl=v==="AUTHENTIC"?"Verified Authentic":v==="REPLICA"?"Counterfeit Detected":"Needs More Photos";
+  var circ=2*Math.PI*35,dash=circ-(conf/100)*circ;
+  var html='<div class="vb v'+(vc==="a"?"a":vc==="r"?"r":"i")+'">'
+    +'<div><div class="vl">'+vl+'</div><div class="vt">'+vd+'</div>'
+    +'<div style="margin-top:6px;font-size:13px;color:var(--t2)">'+(S.brand||"")+(S.model?" "+S.model:"")+'</div></div>'
+    +'<div class="cr"><svg viewBox="0 0 80 80" width="80" height="80">'
+    +'<circle class="rb" cx="40" cy="40" r="35" stroke-dasharray="'+circ+'" stroke-dashoffset="0"/>'
+    +'<circle class="r'+(vc==="a"?"a":vc==="r"?"r2":"i")+'" cx="40" cy="40" r="35" stroke-dasharray="'+circ+'" stroke-dashoffset="'+dash+'" style="transition:stroke-dashoffset 1s ease"/>'
+    +'</svg><div class="cn">'+conf+'%</div></div></div><div class="rbody">';
+  if(summ)html+='<div class="rs"><div class="rst">Summary</div><div class="rtx">'+summ+'</div></div>';
+  if(chks.length)html+='<div class="rs"><div class="rst">Authentication Checks</div><div class="ckg">'+chks.map(function(c){var pass=/^s*-s*[?+/.test(c);return'<div class="cki"><div class="cko" style="color:'+(pass?"var(--ac)":"var(--re)")+'">'+(pass?"&#10003;":"&#10007;")+'</div><div class="ckd">'+c.replace(/^[-s[]+xX]+/,"").trim()+'</div></div>';}).join("")+'</div></div>';
+  if(flgs.length&&!(flgs.length===1&&/none/i.test(flgs[0])))html+='<div class="rs"><div class="rst">Red Flags</div><div class="fl">'+flgs.map(function(f){return'<div class="fi"><div class="fd"></div><span>'+f.replace(/^[-s*]+/,"").trim()+'</span></div>';}).join("")+'</div></div>';
+  if(rec)html+='<div class="rs"><div class="rst">Recommendation</div><div class="rec'+(vc==="r"?" rep":vc==="i"?" inc":"")+'" >'+rec+'</div></div>';
+  html+='</div>';
+  var el=g("rout");el.innerHTML=html;el.className="rc";el.classList.remove("hidden");
+  g("brst").classList.remove("hidden");el.scrollIntoView({behavior:"smooth",block:"start"});
 }
-
-function CheckpointRow({ checkpoint, index }) {
-const sc = { PASS: { color: "#00ff88", icon: "PASS", bg: "#00ff8810" }, FAIL: { color: "#ff3355", icon: "FAIL", bg: "#ff335510" }, UNABLE_TO_VERIFY: { color: "#ffaa00", icon: "-", bg: "#ffaa0010" } }[checkpoint.status] || { color: "#666", icon: "?", bg: "#66666610" };
-return (
-<div style={{ display: "flex", gap: 14, padding: "14px 16px", borderRadius: 10, background: sc.bg, border: `1px solid ${sc.color}22`, animation: `fadeSlide 0.3s ease ${index * 0.08}s both` }}>
-<div style={{ width: 28, height: 28, borderRadius: "50%", background: `${sc.color}22`, color: sc.color, display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 900, fontSize: 14, flexShrink: 0 }}>{sc.icon}</div>
-<div style={{ flex: 1 }}>
-<div style={{ fontSize: 13, fontWeight: 700, color: sc.color, letterSpacing: 1, marginBottom: 4 }}>{checkpoint.area}</div>
-<div style={{ fontSize: 13, color: "#bbb", lineHeight: 1.5 }}>{checkpoint.detail}</div>
-</div>
-</div>
-);
-}
-
-function Header() {
-return (
-<div style={{ textAlign: "center", padding: "32px 0 24px" }}>
-<div style={{ display: "inline-flex", alignItems: "center", gap: 10, marginBottom: 8 }}>
-<div style={{ width: 36, height: 36, borderRadius: 8, background: "linear-gradient(135deg, #00ff88, #00aa55)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18, fontWeight: 900, color: "#000", boxShadow: "0 0 20px #00ff8833" }}>A</div>
-<span style={{ fontSize: 22, fontWeight: 800, letterSpacing: 3 }}>AUTH STUDIO</span>
-</div>
-<div style={{ fontSize: 11, letterSpacing: 4, color: "#00ff88", fontWeight: 600 }}>PRO AUTHENTICATION</div>
-<div style={{ width: 40, height: 2, background: "linear-gradient(90deg, transparent, #00ff88, transparent)", margin: "12px auto 0" }} />
-</div>
-);
-}
-
-// ===========================================
-// MAIN APP
-// ===========================================
-function AuthStudioPro() {
-const [step, setStep] = useState("category");
-const [category, setCategory] = useState(null);
-const [brand, setBrand] = useState("");
-const [isCollab, setIsCollab] = useState(false);
-const [collabPartner, setCollabPartner] = useState(null);
-const [modelName, setModelName] = useState("");
-const [photos, setPhotos] = useState([]);
-const [previews, setPreviews] = useState([]);
-const [analyzing, setAnalyzing] = useState(false);
-const [result, setResult] = useState(null);
-const [error, setError] = useState(null);
-const [progress, setProgress] = useState(0);
-const [dragOver, setDragOver] = useState(false);
-const fileRef = useRef(null);
-
-const selectedCat = CATEGORIES.find(c => c.id === category);
-const brandDisplay = isCollab && collabPartner ? `${brand} x ${collabPartner.label}` : brand;
-const availableCollabs = brand ? COLLAB_PARTNERS.filter(cp => cp.brands.length === 0 || cp.brands.includes(brand)) : [];
-
-const addPhotos = useCallback((files) => {
-const newFiles = Array.from(files).filter(f => f.type.startsWith("image/")).slice(0, 10 - photos.length);
-const newPhotos = [...photos, ...newFiles].slice(0, 10);
-setPhotos(newPhotos);
-newPhotos.forEach((file, i) => {
-if (!previews[i]) {
-const reader = new FileReader();
-reader.onload = (e) => setPreviews(prev => { const n = [...prev]; n[i] = e.target.result; return n; });
-reader.readAsDataURL(file);
-}
-});
-}, [photos, previews]);
-
-const removePhoto = (index) => {
-setPhotos(prev => prev.filter((*, i) => i !== index));
-setPreviews(prev => prev.filter((*, i) => i !== index));
-};
-
-// === RUN AUTH (calls YOUR server, not Anthropic directly) ===
-const runAuth = async () => {
-setAnalyzing(true);
-setStep("analyzing");
-setError(null);
-setProgress(0);
-
-```
-const progressInterval = setInterval(() => {
-  setProgress(prev => Math.min(prev + Math.random() * 8 + 2, 92));
-}, 600);
-
-try {
-  const imageContents = await Promise.all(
-    photos.map(async (file) => {
-      const base64 = await fileToBase64(file);
-      const mediaType = file.type === "image/png" ? "image/png" : file.type === "image/webp" ? "image/webp" : "image/jpeg";
-      return { type: "image", source: { type: "base64", media_type: mediaType, data: base64 } };
-    })
-  );
-
-  const collabContext = isCollab && collabPartner
-    ? `\nCOLLABORATION: This is a ${brand} x ${collabPartner.label} collaboration piece. Authenticate against BOTH brands. Check co-branded tags, special hardware, unique colorways, limited edition packaging, dual branding placement, and collab-specific SKU formats.`
-    : "";
-
-  const userPrompt = `Authenticate this ${selectedCat.label} item.
-```
-
-BRAND: ${brandDisplay}${collabContext}
-MODEL/STYLE: ${modelName || "Not specified - identify from photos"}
-CATEGORY: ${selectedCat.label}
-PHOTOS PROVIDED: ${photos.length}
-
-Required shots for this category: ${selectedCat.requiredShots.join(", ")}
-
-Analyze every photo thoroughly. Use web_search to research current fake batch tells for this exact brand/model/colorway.${isCollab ? "\n\nCRITICAL: COLLAB piece. Search for fake tells specific to this collaboration. Verify co-branding, special tags, and collaboration-specific details." : ""}
-
-AUTHENTIC verdict requires 90-100% confidence with 3+ strong pass points and ZERO fails.`;
-
-```
-  // * Call YOUR server API route - NOT Anthropic directly *
-  const response = await fetch("/api/authenticate", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      system: AUTH_SYSTEM_PROMPT,
-      messages: [{ role: "user", content: [...imageContents, { type: "text", text: userPrompt }] }],
-    }),
-  });
-
-  const data = await response.json();
-  if (data.error) throw new Error(data.error);
-
-  clearInterval(progressInterval);
-  setProgress(100);
-
-  const textBlocks = data.content?.filter(b => b.type === "text").map(b => b.text).join("") || "";
-  let parsed = null;
-  try { parsed = JSON.parse(textBlocks.trim()); } catch {
-    const jsonMatch = textBlocks.match(/\{[\s\S]*\}/);
-    if (jsonMatch) try { parsed = JSON.parse(jsonMatch[0]); } catch {}
-  }
-
-  if (parsed && parsed.verdict) {
-    setResult(parsed);
-    setStep("result");
-  } else {
-    setError("Authentication returned unexpected format. Try again.");
-    setStep("upload");
-  }
-} catch (err) {
-  clearInterval(progressInterval);
-  setError(`Authentication failed: ${err.message}`);
-  setStep("upload");
-} finally {
-  setAnalyzing(false);
-}
-```
-
-};
-
-const resetAll = () => {
-setStep("category"); setCategory(null); setBrand(""); setIsCollab(false);
-setCollabPartner(null); setModelName(""); setPhotos([]); setPreviews([]);
-setResult(null); setError(null); setProgress(0);
-};
-
-// === SHARED STYLES ===
-const wrap = { position: "relative", zIndex: 1, maxWidth: 540, margin: "0 auto", padding: "20px 16px 60px" };
-const bg = { position: "fixed", top: 0, left: 0, right: 0, bottom: 0, background: "radial-gradient(ellipse at 20% 50%, #0d1a0f 0%, transparent 50%), radial-gradient(ellipse at 80% 20%, #0a1520 0%, transparent 50%), radial-gradient(ellipse at 50% 80%, #15100a 0%, transparent 50%)", pointerEvents: "none", zIndex: 0 };
-const page = { minHeight: "100vh", background: "#0a0a0a", color: "#fff", position: "relative", overflow: "hidden" };
-const backBtn = { background: "none", border: "none", color: "#666", cursor: "pointer", fontSize: 13, marginBottom: 16, padding: 0 };
-
-// ===========================================
-// STEP: CATEGORY
-// ===========================================
-if (step === "category") return (
-<div style={page}><div style={bg}/><div style={wrap}>
-<Header/>
-<div style={{ textAlign: "center", marginBottom: 28 }}>
-<h2 style={{ fontSize: 20, fontWeight: 700, margin: 0, color: "#eee" }}>What are you authenticating?</h2>
-<p style={{ fontSize: 13, color: "#666", marginTop: 6 }}>Select category for optimized AI analysis</p>
-</div>
-<div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
-{CATEGORIES.map(cat => (
-<button key={cat.id} onClick={() => { setCategory(cat.id); setStep("brand"); }}
-style={{ background: "#111", border: "1px solid #222", borderRadius: 12, padding: "20px 14px", color: "#fff", cursor: "pointer", textAlign: "center", transition: "all 0.2s" }}
-onMouseEnter={e => { e.currentTarget.style.borderColor = "#00ff88"; e.currentTarget.style.background = "#0a1a0f"; }}
-onMouseLeave={e => { e.currentTarget.style.borderColor = "#222"; e.currentTarget.style.background = "#111"; }}>
-<div style={{ fontSize: 28, marginBottom: 8 }}>{cat.icon}</div>
-<div style={{ fontSize: 14, fontWeight: 700, letterSpacing: 1 }}>{cat.label}</div>
-<div style={{ fontSize: 11, color: "#666", marginTop: 4 }}>Min {cat.minPhotos} photos</div>
-</button>
-))}
-</div>
-<div style={{ textAlign: "center", marginTop: 28, padding: "16px 20px", background: "#111", borderRadius: 10, border: "1px solid #1a1a1a" }}>
-<div style={{ fontSize: 11, color: "#666", letterSpacing: 1, marginBottom: 6 }}>AUTHENTICATION STANDARD</div>
-<div style={{ fontSize: 13, color: "#999", lineHeight: 1.6 }}>
-90-100% = <span style={{ color: "#00ff88", fontWeight: 700 }}>AUTHENTIC</span> - StockX / GOAT ready<br/>
-70-89% = <span style={{ color: "#ffaa00", fontWeight: 700 }}>INCONCLUSIVE</span> - Needs more evidence<br/>
-0-69% = <span style={{ color: "#ff3355", fontWeight: 700 }}>REPLICA</span> - Do not sell as authentic
-</div>
-</div>
-</div></div>
-);
-
-// ===========================================
-// STEP: BRAND + COLLAB
-// ===========================================
-if (step === "brand") {
-const canContinue = brand && (!isCollab || collabPartner);
-return (
-<div style={page}><div style={bg}/><div style={wrap}>
-<Header/>
-<button onClick={() => setStep("category")} style={backBtn}><- Back</button>
-<div style={{ marginBottom: 24 }}>
-<h2 style={{ fontSize: 20, fontWeight: 700, margin: 0, color: "#eee" }}>Brand & Model</h2>
-<p style={{ fontSize: 13, color: "#666", marginTop: 6 }}>Select primary brand, toggle collab if it's a collaboration piece</p>
-</div>
-
-```
-    {/* Primary brand */}
-    <div style={{ marginBottom: 16 }}>
-      <div style={{ fontSize: 11, letterSpacing: 2, color: "#888", fontWeight: 600, marginBottom: 10 }}>PRIMARY BRAND</div>
-      <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
-        {BRANDS.map(b => (
-          <button key={b} onClick={() => { setBrand(b); setCollabPartner(null); }}
-            style={{ padding: "8px 14px", borderRadius: 8, fontSize: 13, fontWeight: 600, cursor: "pointer", background: brand === b ? "#00ff8820" : "#151515", border: `1px solid ${brand === b ? "#00ff88" : "#222"}`, color: brand === b ? "#00ff88" : "#aaa", transition: "all 0.15s" }}>{b}</button>
-        ))}
-      </div>
-    </div>
-
-    {/* Collab toggle */}
-    {brand && (
-      <div style={{ marginBottom: 16 }}>
-        <button onClick={() => { setIsCollab(!isCollab); if (isCollab) setCollabPartner(null); }}
-          style={{ display: "flex", alignItems: "center", gap: 12, width: "100%", padding: "14px 16px", borderRadius: 10, cursor: "pointer", background: isCollab ? "#00ff8810" : "#111", border: `1px solid ${isCollab ? "#00ff8855" : "#222"}`, transition: "all 0.2s" }}>
-          <div style={{ width: 42, height: 24, borderRadius: 12, position: "relative", background: isCollab ? "#00ff88" : "#333", transition: "background 0.2s", flexShrink: 0 }}>
-            <div style={{ width: 18, height: 18, borderRadius: "50%", background: "#fff", position: "absolute", top: 3, left: isCollab ? 21 : 3, transition: "left 0.2s", boxShadow: "0 1px 3px #0005" }} />
-          </div>
-          <div style={{ textAlign: "left" }}>
-            <div style={{ fontSize: 14, fontWeight: 700, color: isCollab ? "#00ff88" : "#aaa" }}>Collaboration Piece</div>
-            <div style={{ fontSize: 11, color: "#555", marginTop: 2 }}>e.g. Nike x NOCTA, Jordan x Travis Scott</div>
-          </div>
-        </button>
-      </div>
-    )}
-
-    {/* Collab partners */}
-    {isCollab && brand && (
-      <div style={{ marginBottom: 16 }}>
-        <div style={{ fontSize: 11, letterSpacing: 2, color: "#ffaa00", fontWeight: 600, marginBottom: 10 }}>COLLAB PARTNER</div>
-        {availableCollabs.length > 0 ? (
-          <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
-            {availableCollabs.map(cp => (
-              <button key={cp.id} onClick={() => setCollabPartner(cp)}
-                style={{ padding: "8px 14px", borderRadius: 8, fontSize: 13, fontWeight: 600, cursor: "pointer", background: collabPartner?.id === cp.id ? "#ffaa0025" : "#151515", border: `1px solid ${collabPartner?.id === cp.id ? "#ffaa00" : "#222"}`, color: collabPartner?.id === cp.id ? "#ffaa00" : "#aaa", transition: "all 0.15s" }}>{cp.label}</button>
-            ))}
-          </div>
-        ) : (
-          <div style={{ fontSize: 12, color: "#555", padding: "8px 0" }}>No preset collabs for {brand} - type the collab in the model field</div>
-        )}
-        {collabPartner && (
-          <div style={{ display: "inline-flex", alignItems: "center", gap: 8, marginTop: 12, padding: "8px 14px", borderRadius: 8, background: "#111", border: "1px solid #333" }}>
-            <span style={{ fontSize: 13, fontWeight: 700, color: "#00ff88" }}>{brand}</span>
-            <span style={{ fontSize: 15, color: "#ffaa00", fontWeight: 800 }}>x</span>
-            <span style={{ fontSize: 13, fontWeight: 700, color: "#ffaa00" }}>{collabPartner.label}</span>
-          </div>
-        )}
-      </div>
-    )}
-
-    {/* Model name */}
-    <div style={{ marginBottom: 28 }}>
-      <div style={{ fontSize: 11, letterSpacing: 2, color: "#888", fontWeight: 600, marginBottom: 10 }}>MODEL / STYLE NAME</div>
-      <input type="text" value={modelName} onChange={e => setModelName(e.target.value)}
-        placeholder={isCollab && collabPartner ? `e.g. "${brand} x ${collabPartner.label} Tech Fleece Hoodie Black"` : 'e.g. "Jordan 4 Retro Military Black"'}
-        style={{ width: "100%", padding: "14px 16px", borderRadius: 10, fontSize: 14, background: "#111", border: "1px solid #222", color: "#fff" }}
-        onFocus={e => e.target.style.borderColor = "#00ff88"} onBlur={e => e.target.style.borderColor = "#222"} />
-      <p style={{ fontSize: 11, color: "#555", marginTop: 6 }}>Be specific - colorway and year help AI find exact fake batch tells</p>
-    </div>
-
-    <button onClick={() => canContinue && setStep("upload")} disabled={!canContinue}
-      style={{ width: "100%", padding: "16px", borderRadius: 12, border: "none", fontSize: 15, fontWeight: 800, letterSpacing: 2, cursor: canContinue ? "pointer" : "default", background: canContinue ? "linear-gradient(135deg, #00ff88, #00cc6a)" : "#222", color: canContinue ? "#000" : "#555", transition: "all 0.2s" }}>CONTINUE TO PHOTOS -></button>
-    {isCollab && !collabPartner && brand && <p style={{ textAlign: "center", fontSize: 12, color: "#ffaa00", marginTop: 8 }}>Select a collab partner to continue</p>}
-  </div></div>
-);
-```
-
-}
-
-// ===========================================
-// STEP: UPLOAD
-// ===========================================
-if (step === "upload") {
-const canSubmit = photos.length >= (selectedCat?.minPhotos || 3);
-return (
-<div style={page}><div style={bg}/><div style={wrap}>
-<Header/>
-<button onClick={() => setStep("brand")} style={backBtn}><- Back</button>
-{error && <div style={{ padding: "12px 16px", borderRadius: 10, background: "#ff335515", border: "1px solid #ff335533", color: "#ff6677", fontSize: 13, marginBottom: 16 }}>{error}</div>}
-<div style={{ marginBottom: 20 }}>
-<h2 style={{ fontSize: 20, fontWeight: 700, margin: 0, color: "#eee" }}>Upload Photos</h2>
-<p style={{ fontSize: 13, color: "#666", marginTop: 6 }}>{brandDisplay} . {selectedCat?.label} . Min {selectedCat?.minPhotos} photos</p>
-</div>
-
-```
-    {/* Required shots */}
-    <div style={{ padding: "14px 16px", background: "#111", borderRadius: 10, border: "1px solid #1a1a1a", marginBottom: 16 }}>
-      <div style={{ fontSize: 11, letterSpacing: 2, color: "#00ff88", fontWeight: 600, marginBottom: 10 }}>REQUIRED SHOTS</div>
-      {selectedCat?.requiredShots.map((shot, i) => (
-        <div key={i} style={{ fontSize: 12, color: i < photos.length ? "#00ff88" : "#555", padding: "3px 0", display: "flex", gap: 8, alignItems: "center" }}>
-          <span style={{ fontSize: 10 }}>{i < photos.length ? "PASS" : "O"}</span> {shot}
-        </div>
-      ))}
-      {selectedCat?.bonusShots.length > 0 && <>
-        <div style={{ fontSize: 11, letterSpacing: 2, color: "#ffaa00", fontWeight: 600, margin: "12px 0 8px" }}>BONUS (INCREASES ACCURACY)</div>
-        {selectedCat.bonusShots.slice(0, 3).map((shot, i) => (
-          <div key={i} style={{ fontSize: 12, color: "#444", padding: "3px 0", display: "flex", gap: 8, alignItems: "center" }}>
-            <span style={{ fontSize: 10 }}>+</span> {shot}
-          </div>
-        ))}
-      </>}
-    </div>
-
-    {/* Drop zone */}
-    <div onClick={() => fileRef.current?.click()}
-      onDragOver={e => { e.preventDefault(); setDragOver(true); }}
-      onDragLeave={() => setDragOver(false)}
-      onDrop={e => { e.preventDefault(); setDragOver(false); addPhotos(e.dataTransfer.files); }}
-      style={{ border: `2px dashed ${dragOver ? "#00ff88" : "#333"}`, borderRadius: 12, padding: "32px 20px", textAlign: "center", cursor: "pointer", background: dragOver ? "#00ff8808" : "#0a0a0a", transition: "all 0.2s", marginBottom: 16 }}>
-      <div style={{ fontSize: 32, marginBottom: 8, opacity: 0.5 }}></div>
-      <div style={{ fontSize: 14, fontWeight: 600, color: "#aaa" }}>Tap to upload or drag photos here</div>
-      <div style={{ fontSize: 12, color: "#555", marginTop: 4 }}>{photos.length}/10 photos . JPG, PNG, WEBP</div>
-      <input ref={fileRef} type="file" accept="image/*" multiple style={{ display: "none" }} onChange={e => addPhotos(e.target.files)} />
-    </div>
-
-    {/* Photo grid */}
-    {previews.length > 0 && (
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 8, marginBottom: 24 }}>
-        {previews.map((src, i) => src && (
-          <div key={i} style={{ position: "relative", aspectRatio: "1", borderRadius: 8, overflow: "hidden", border: "1px solid #222" }}>
-            <img src={src} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-            <button onClick={() => removePhoto(i)} style={{ position: "absolute", top: 4, right: 4, width: 22, height: 22, borderRadius: "50%", background: "#000c", border: "none", color: "#ff4466", cursor: "pointer", fontSize: 12, display: "flex", alignItems: "center", justifyContent: "center" }}>FAIL</button>
-          </div>
-        ))}
-      </div>
-    )}
-
-    <button onClick={runAuth} disabled={!canSubmit}
-      style={{ width: "100%", padding: "18px", borderRadius: 12, border: "none", fontSize: 16, fontWeight: 900, letterSpacing: 3, cursor: canSubmit ? "pointer" : "default", background: canSubmit ? "linear-gradient(135deg, #00ff88, #00cc6a)" : "#222", color: canSubmit ? "#000" : "#555", boxShadow: canSubmit ? "0 0 30px #00ff8833" : "none" }}>AUTHENTICATE</button>
-    {!canSubmit && <p style={{ textAlign: "center", fontSize: 12, color: "#ff6644", marginTop: 8 }}>Add at least {selectedCat?.minPhotos - photos.length} more photo{selectedCat?.minPhotos - photos.length > 1 ? "s" : ""}</p>}
-  </div></div>
-);
-```
-
-}
-
-// ===========================================
-// STEP: ANALYZING
-// ===========================================
-if (step === "analyzing") return (
-<div style={page}><div style={bg}/><div style={wrap}>
-<Header/>
-<div style={{ textAlign: "center", paddingTop: 40 }}>
-<div style={{ position: "relative", width: 200, height: 200, margin: "0 auto 32px", borderRadius: 16, overflow: "hidden", border: "1px solid #222" }}>
-{previews[0] && <img src={previews[0]} alt="" style={{ width: "100%", height: "100%", objectFit: "cover", opacity: 0.5 }} />}
-<ScanLine active={true} />
-</div>
-<div style={{ fontSize: 18, fontWeight: 800, letterSpacing: 3, marginBottom: 12 }}>AUTHENTICATING</div>
-<div style={{ fontSize: 13, color: "#888", marginBottom: 24 }}>AI analyzing {photos.length} photos with web research...</div>
-<div style={{ width: "80%", height: 4, background: "#222", borderRadius: 2, margin: "0 auto", overflow: "hidden" }}>
-<div style={{ width: `${progress}%`, height: "100%", borderRadius: 2, background: "linear-gradient(90deg, #00ff88, #00ffcc)", transition: "width 0.5s ease", boxShadow: "0 0 10px #00ff8844" }} />
-</div>
-<div style={{ fontSize: 12, color: "#555", marginTop: 8 }}>{Math.round(progress)}%</div>
-<div style={{ marginTop: 32, display: "flex", flexDirection: "column", gap: 8 }}>
-{[
-{ label: "Stitching & construction", done: progress > 15 },
-{ label: "Tag & label verification", done: progress > 30 },
-{ label: "Logo & branding analysis", done: progress > 45 },
-{ label: "Web research - fake batch tells", done: progress > 55 },
-...(isCollab ? [{ label: `Collab verification - ${brandDisplay}`, done: progress > 65 }] : []),
-{ label: "Material & shape cross-reference", done: progress > 70 },
-{ label: "Price & market validation", done: progress > 82 },
-{ label: "Final verdict computation", done: progress > 90 },
-].map((item, i) => (
-<div key={i} style={{ fontSize: 12, color: item.done ? "#00ff88" : "#333", transition: "color 0.3s", display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}>
-<span style={{ fontSize: 10 }}>{item.done ? "PASS" : "O"}</span> {item.label}
-</div>
-))}
-</div>
-</div>
-</div></div>
-);
-
-// ===========================================
-// STEP: RESULT
-// ===========================================
-if (step === "result" && result) {
-const passCount = result.checkpoints?.filter(c => c.status === "PASS").length || 0;
-const failCount = result.checkpoints?.filter(c => c.status === "FAIL").length || 0;
-const unableCount = result.checkpoints?.filter(c => c.status === "UNABLE_TO_VERIFY").length || 0;
-return (
-<div style={page}><div style={bg}/><div style={wrap}>
-<Header/>
-<div style={{ textAlign: "center", marginBottom: 8, fontSize: 12, color: "#666", letterSpacing: 1 }}>{brandDisplay} . {modelName || selectedCat?.label} . {photos.length} photos</div>
-
-```
-    {/* Verdict */}
-    <div style={{ textAlign: "center", padding: "28px 0 24px" }}><VerdictBadge verdict={result.verdict} confidence={result.confidence} /></div>
-
-    {/* Summary */}
-    <div style={{ padding: "16px 18px", background: "#111", borderRadius: 12, border: "1px solid #1a1a1a", marginBottom: 16, textAlign: "center" }}>
-      <div style={{ fontSize: 14, color: "#ddd", lineHeight: 1.6 }}>{result.summary}</div>
-    </div>
-
-    {/* Stats */}
-    <div style={{ display: "flex", gap: 8, marginBottom: 16 }}>
-      <div style={{ flex: 1, padding: "12px", background: "#00ff8810", borderRadius: 8, textAlign: "center" }}><div style={{ fontSize: 22, fontWeight: 900, color: "#00ff88" }}>{passCount}</div><div style={{ fontSize: 10, color: "#00ff88aa", letterSpacing: 1 }}>PASS</div></div>
-      <div style={{ flex: 1, padding: "12px", background: "#ff335510", borderRadius: 8, textAlign: "center" }}><div style={{ fontSize: 22, fontWeight: 900, color: "#ff3355" }}>{failCount}</div><div style={{ fontSize: 10, color: "#ff3355aa", letterSpacing: 1 }}>FAIL</div></div>
-      <div style={{ flex: 1, padding: "12px", background: "#ffaa0010", borderRadius: 8, textAlign: "center" }}><div style={{ fontSize: 22, fontWeight: 900, color: "#ffaa00" }}>{unableCount}</div><div style={{ fontSize: 10, color: "#ffaa00aa", letterSpacing: 1 }}>UNVERIFIED</div></div>
-    </div>
-
-    {/* Checkpoints */}
-    <div style={{ marginBottom: 16 }}>
-      <div style={{ fontSize: 11, letterSpacing: 2, color: "#888", fontWeight: 600, marginBottom: 10 }}>AUTHENTICATION CHECKPOINTS</div>
-      <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-        {result.checkpoints?.map((cp, i) => <CheckpointRow key={i} checkpoint={cp} index={i} />)}
-      </div>
-    </div>
-
-    {/* Web findings */}
-    {result.webFindings && (
-      <div style={{ padding: "14px 16px", background: "#111", borderRadius: 10, border: "1px solid #1a1a1a", marginBottom: 12 }}>
-        <div style={{ fontSize: 11, letterSpacing: 2, color: "#00aaff", fontWeight: 600, marginBottom: 8 }}>WEB RESEARCH FINDINGS</div>
-        <div style={{ fontSize: 13, color: "#aaa", lineHeight: 1.6 }}>{result.webFindings}</div>
-      </div>
-    )}
-
-    {/* Pricing */}
-    {result.pricingContext && (
-      <div style={{ padding: "14px 16px", background: "#111", borderRadius: 10, border: "1px solid #1a1a1a", marginBottom: 12 }}>
-        <div style={{ fontSize: 11, letterSpacing: 2, color: "#888", fontWeight: 600, marginBottom: 8 }}>PRICING CONTEXT</div>
-        <div style={{ display: "flex", gap: 16 }}>
-          {result.pricingContext.retail && <div><div style={{ fontSize: 11, color: "#555" }}>RETAIL</div><div style={{ fontSize: 15, fontWeight: 700, color: "#fff" }}>{result.pricingContext.retail}</div></div>}
-          {result.pricingContext.resale && <div><div style={{ fontSize: 11, color: "#555" }}>RESALE</div><div style={{ fontSize: 15, fontWeight: 700, color: "#00ff88" }}>{result.pricingContext.resale}</div></div>}
-        </div>
-        {result.pricingContext.note && <div style={{ fontSize: 12, color: "#ffaa00", marginTop: 8 }}>{result.pricingContext.note}</div>}
-      </div>
-    )}
-
-    {/* Photo quality */}
-    {result.photoQuality?.score === "NEEDS_MORE" && (
-      <div style={{ padding: "14px 16px", background: "#ffaa0010", borderRadius: 10, border: "1px solid #ffaa0033", marginBottom: 12 }}>
-        <div style={{ fontSize: 11, letterSpacing: 2, color: "#ffaa00", fontWeight: 600, marginBottom: 8 }}>ADDITIONAL PHOTOS RECOMMENDED</div>
-        <div style={{ fontSize: 13, color: "#cca040", lineHeight: 1.6 }}>{result.photoQuality.missing?.join(" . ")}</div>
-      </div>
-    )}
-
-    {/* Collab verification */}
-    {result.collabAuthentication?.isCollab && result.collabAuthentication.collabChecks?.length > 0 && (
-      <div style={{ padding: "14px 16px", background: "#111", borderRadius: 10, border: "1px solid #ffaa0033", marginBottom: 12 }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 10 }}>
-          <span style={{ fontSize: 15, fontWeight: 800, color: "#ffaa00" }}>x</span>
-          <div style={{ fontSize: 11, letterSpacing: 2, color: "#ffaa00", fontWeight: 600 }}>COLLABORATION VERIFICATION</div>
-        </div>
-        <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-          {result.collabAuthentication.collabChecks.map((cc, i) => {
-            const st = { PASS: { c: "#00ff88", i: "PASS" }, FAIL: { c: "#ff3355", i: "FAIL" }, UNABLE_TO_VERIFY: { c: "#ffaa00", i: "-" } }[cc.status] || { c: "#666", i: "?" };
-            return (
-              <div key={i} style={{ display: "flex", gap: 10, padding: "8px 10px", borderRadius: 8, background: `${st.c}08` }}>
-                <span style={{ color: st.c, fontWeight: 900, fontSize: 13, flexShrink: 0 }}>{st.i}</span>
-                <div><div style={{ fontSize: 12, fontWeight: 700, color: st.c }}>{cc.check}</div><div style={{ fontSize: 12, color: "#999", marginTop: 2 }}>{cc.detail}</div></div>
-              </div>
-            );
-          })}
-        </div>
-      </div>
-    )}
-
-    {/* Recommendation */}
-    {result.recommendation && (
-      <div style={{ padding: "16px 18px", borderRadius: 12, marginBottom: 24, textAlign: "center", background: result.verdict === "AUTHENTIC" ? "#00ff8815" : result.verdict === "REPLICA" ? "#ff335515" : "#ffaa0015", border: `1px solid ${result.verdict === "AUTHENTIC" ? "#00ff8833" : result.verdict === "REPLICA" ? "#ff335533" : "#ffaa0033"}` }}>
-        <div style={{ fontSize: 11, letterSpacing: 2, color: "#888", fontWeight: 600, marginBottom: 6 }}>RECOMMENDATION</div>
-        <div style={{ fontSize: 14, color: "#ddd", lineHeight: 1.5 }}>{result.recommendation}</div>
-      </div>
-    )}
-
-    {/* Actions */}
-    <div style={{ display: "flex", gap: 10 }}>
-      <button onClick={resetAll} style={{ flex: 1, padding: "16px", borderRadius: 12, border: "1px solid #333", background: "#111", color: "#aaa", fontSize: 14, fontWeight: 700, letterSpacing: 1, cursor: "pointer" }}>NEW CHECK</button>
-      <button onClick={() => { setStep("upload"); setResult(null); }} style={{ flex: 1, padding: "16px", borderRadius: 12, border: "none", background: "linear-gradient(135deg, #00ff88, #00cc6a)", color: "#000", fontSize: 14, fontWeight: 700, letterSpacing: 1, cursor: "pointer" }}>ADD PHOTOS & RECHECK</button>
-    </div>
-
-    <div style={{ textAlign: "center", marginTop: 24, padding: "12px 16px", borderRadius: 8, background: "#0a0a0a", border: "1px solid #1a1a1a" }}>
-      <div style={{ fontSize: 10, color: "#444", lineHeight: 1.6 }}>Auth Studio Pro uses AI vision analysis with real-time web research. Results are advisory - for high-value items, supplement with professional in-hand authentication.</div>
-    </div>
-  </div></div>
-);
-```
-
-}
-
-return null;
-}
-
-ReactDOM.createRoot(document.getElementById("root")).render(React.createElement(AuthStudioPro));
+function err(msg){g("ldg").classList.add("hidden");var el=g("rout");el.innerHTML='<div style="padding:32px;text-align:center"><div style="font-size:32px;margin-bottom:12px">&#9888;</div><div style="font-family:Space Mono,monospace;font-size:13px;color:var(--re);margin-bottom:8px">ANALYSIS FAILED</div><div style="font-size:14px;color:var(--t2)">'+msg+'</div></div>';el.classList.remove("hidden");g("brst").classList.remove("hidden");}
+function reset(){S={cat:null,brand:"",model:"",color:"",price:"",photos:[],previews:[]};["fb","fm","fc","fp"].forEach(function(id){g(id).value="";});g("pgrid").innerHTML="";g("fi").value="";document.querySelectorAll(".cb").forEach(function(b){b.classList.remove("sel");});g("bn1").disabled=true;go("cat");}
+g("bn1").addEventListener("click",function(){go("det");});
+g("bk1").addEventListener("click",function(){go("cat");});
+g("bn2").addEventListener("click",function(){S.brand=g("fb").value;S.model=g("fm").value;S.color=g("fc").value;S.price=g("fp").value;go("photos");});
+g("bk2").addEventListener("click",function(){go("det");});
+g("bna").addEventListener("click",analyze);
+g("brst").addEventListener("click",reset);
+g("fi").addEventListener("change",function(e){addFiles(e.target.files);});
+var dz=g("dz");
+dz.addEventListener("dragover",function(e){e.preventDefault();dz.classList.add("drag");});
+dz.addEventListener("dragleave",function(){dz.classList.remove("drag");});
+dz.addEventListener("drop",function(e){e.preventDefault();dz.classList.remove("drag");addFiles(Array.from(e.dataTransfer.files).filter(function(f){return f.type.startsWith("image/");}));});
 </script>
-
 </body>
 </html>
