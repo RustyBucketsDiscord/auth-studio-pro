@@ -290,52 +290,114 @@ function fld(t,f){
 
 function renderResult(t){
   g("ldg").classList.add("hidden");
-  var v = fld(t,"VERDICT").toUpperCase().replace(/[^A-Z]/g,"");
-  if(v!=="AUTHENTIC" && v!=="REPLICA") v="INCONCLUSIVE";
-  var conf = parseInt(fld(t,"CONFIDENCE"))||0;
-  var summ = fld(t,"SUMMARY");
-  var rec = fld(t,"RECOMMENDATION");
-  var cm = t.match(/CHECKS:\n([\s\S]*?)(?=\nRED FLAGS:|$)/i);
-  var chks = cm ? cm[1].split("\n").map(function(l){return l.trim();}).filter(function(l){return l.length>3 && l[0]==="-";}) : [];
-  var fm = t.match(/RED FLAGS:\n([\s\S]*?)(?=\nRECOMMENDATION:|$)/i);
-  var flgs = fm ? fm[1].split("\n").map(function(l){return l.trim();}).filter(function(l){return l.length>2;}) : [];
-  var vc = v==="AUTHENTIC"?"a":v==="REPLICA"?"r":"i";
-  var vd = v==="AUTHENTIC"?"Authentic":v==="REPLICA"?"Replica":"Inconclusive";
-  var vl = v==="AUTHENTIC"?"Verified Authentic":v==="REPLICA"?"Counterfeit Detected":"Needs More Photos";
-  var circ = 2*Math.PI*35;
-  var dash = circ - (conf/100)*circ;
-  var h = "<div class=\"vb v" + (vc==="a"?"a":vc==="r"?"r":"i") + "\">"
-    + "<div><div class=\"vl\">" + vl + "</div><div class=\"vt\">" + vd + "</div>"
-    + "<div style=\"margin-top:6px;font-size:13px;color:var(--t2)\">" + (S.brand||"") + (S.model?" "+S.model:"") + "</div></div>"
-    + "<div class=\"cr\"><svg viewBox=\"0 0 80 80\" width=\"80\" height=\"80\">"
-    + "<circle class=\"rb\" cx=\"40\" cy=\"40\" r=\"35\" stroke-dasharray=\"" + circ + "\" stroke-dashoffset=\"0\"/>"
-    + "<circle class=\"r" + (vc==="a"?"a":vc==="r"?"r2":"i") + "\" cx=\"40\" cy=\"40\" r=\"35\" stroke-dasharray=\"" + circ + "\" stroke-dashoffset=\"" + dash + "\" style=\"transition:stroke-dashoffset 1s ease\"/>"
-    + "</svg><div class=\"cn\">" + conf + "%</div></div></div>"
-    + "<div class=\"rbody\">";
-  if(summ) h += "<div class=\"rs\"><div class=\"rst\">Summary</div><div class=\"rtx\">" + summ + "</div></div>";
+  var v=fld(t,"VERDICT").toUpperCase().replace(/[^A-Z]/g,"");
+  if(v!=="AUTHENTIC"&&v!=="REPLICA")v="INCONCLUSIVE";
+  var conf=parseInt(fld(t,"CONFIDENCE"))||0;
+  var summ=fld(t,"SUMMARY");
+  var rec=fld(t,"RECOMMENDATION");
+  var cm=t.match(/CHECKS:[\n]([\s\S]*?)(?=[\n]RED FLAGS:|$)/i);
+  var chks=cm?cm[1].split("\n").map(function(l){return l.trim();}).filter(function(l){return l.length>3&&l[0]==="-";}):[];
+  var fm=t.match(/RED FLAGS:[\n]([\s\S]*?)(?=[\n]RECOMMENDATION:|$)/i);
+  var flgs=fm?fm[1].split("\n").map(function(l){return l.trim();}).filter(function(l){return l.length>2;}):[];
+
+  // Tiered verdict system
+  var tier, tierLabel, tierColor, tierBg, tierBorder, tierDesc;
+  if(v==="REPLICA"){
+    tier="REPLICA"; tierLabel="Counterfeit Detected";
+    tierColor="var(--re)"; tierBg="rgba(255,51,85,.12)"; tierBorder="rgba(255,51,85,.3)";
+    tierDesc="This item shows strong signs of being a replica. Do not purchase or list for resale.";
+  } else if(v==="INCONCLUSIVE"){
+    tier="INCONCLUSIVE"; tierLabel="Inconclusive";
+    tierColor="var(--ye)"; tierBg="rgba(255,204,0,.08)"; tierBorder="rgba(255,204,0,.2)";
+    tierDesc="Not enough photo detail to make a confident call. Request better photos before proceeding.";
+  } else if(conf>=90){
+    tier="AUTH_HIGH"; tierLabel="Verified Authentic";
+    tierColor="var(--ac)"; tierBg="rgba(0,255,136,.12)"; tierBorder="rgba(0,255,136,.3)";
+    tierDesc="High confidence authentic. Safe for StockX, GOAT, Grailed, and in-store purchases.";
+  } else if(conf>=80){
+    tier="AUTH_MED"; tierLabel="Likely Authentic";
+    tierColor="#7fff00"; tierBg="rgba(127,255,0,.08)"; tierBorder="rgba(127,255,0,.25)";
+    tierDesc="Likely authentic but not a slam dunk. Fine for most platforms — verify tags in hand before StockX.";
+  } else if(conf>=65){
+    tier="UNCERTAIN"; tierLabel="Uncertain — Needs Review";
+    tierColor="var(--ye)"; tierBg="rgba(255,204,0,.08)"; tierBorder="rgba(255,204,0,.2)";
+    tierDesc="Score too low to confidently pass. Request clearer photos of tags, stitching, and labels.";
+  } else {
+    tier="HIGH_RISK"; tierLabel="High Replica Risk";
+    tierColor="var(--re)"; tierBg="rgba(255,51,85,.12)"; tierBorder="rgba(255,51,85,.3)";
+    tierDesc="Multiple red flags detected. Treat as replica until proven otherwise with more evidence.";
+  }
+
+  // Platform guidance
+  var platforms = "";
+  if(tier==="AUTH_HIGH"){
+    platforms = "<div style=\"margin-top:12px;display:flex;flex-wrap:wrap;gap:6px\">"
+      +"<span style=\"font-size:11px;padding:4px 10px;border-radius:4px;background:rgba(0,255,136,.15);color:var(--ac);font-family:Space Mono,monospace\">STOCKX OK</span>"
+      +"<span style=\"font-size:11px;padding:4px 10px;border-radius:4px;background:rgba(0,255,136,.15);color:var(--ac);font-family:Space Mono,monospace\">GOAT OK</span>"
+      +"<span style=\"font-size:11px;padding:4px 10px;border-radius:4px;background:rgba(0,255,136,.15);color:var(--ac);font-family:Space Mono,monospace\">GRAILED OK</span>"
+      +"<span style=\"font-size:11px;padding:4px 10px;border-radius:4px;background:rgba(0,255,136,.15);color:var(--ac);font-family:Space Mono,monospace\">IN-STORE OK</span>"
+      +"</div>";
+  } else if(tier==="AUTH_MED"){
+    platforms = "<div style=\"margin-top:12px;display:flex;flex-wrap:wrap;gap:6px\">"
+      +"<span style=\"font-size:11px;padding:4px 10px;border-radius:4px;background:rgba(255,204,0,.15);color:var(--ye);font-family:Space Mono,monospace\">STOCKX — VERIFY TAGS</span>"
+      +"<span style=\"font-size:11px;padding:4px 10px;border-radius:4px;background:rgba(0,255,136,.15);color:var(--ac);font-family:Space Mono,monospace\">GOAT OK</span>"
+      +"<span style=\"font-size:11px;padding:4px 10px;border-radius:4px;background:rgba(0,255,136,.15);color:var(--ac);font-family:Space Mono,monospace\">GRAILED OK</span>"
+      +"</div>";
+  } else if(tier==="UNCERTAIN"||tier==="INCONCLUSIVE"){
+    platforms = "<div style=\"margin-top:12px;display:flex;flex-wrap:wrap;gap:6px\">"
+      +"<span style=\"font-size:11px;padding:4px 10px;border-radius:4px;background:rgba(255,51,85,.15);color:var(--re);font-family:Space Mono,monospace\">STOCKX — DO NOT LIST</span>"
+      +"<span style=\"font-size:11px;padding:4px 10px;border-radius:4px;background:rgba(255,204,0,.15);color:var(--ye);font-family:Space Mono,monospace\">REQUEST MORE PHOTOS</span>"
+      +"</div>";
+  } else {
+    platforms = "<div style=\"margin-top:12px;display:flex;flex-wrap:wrap;gap:6px\">"
+      +"<span style=\"font-size:11px;padding:4px 10px;border-radius:4px;background:rgba(255,51,85,.15);color:var(--re);font-family:Space Mono,monospace\">DO NOT BUY</span>"
+      +"<span style=\"font-size:11px;padding:4px 10px;border-radius:4px;background:rgba(255,51,85,.15);color:var(--re);font-family:Space Mono,monospace\">DO NOT LIST</span>"
+      +"</div>";
+  }
+
+  var circ=2*Math.PI*35, dash=circ-(conf/100)*circ;
+  var vc=v==="AUTHENTIC"?"a":v==="REPLICA"?"r":"i";
+
+  var h="<div style=\"padding:28px 32px;display:flex;align-items:center;justify-content:space-between;background:"+tierBg+";border-bottom:1px solid "+tierBorder+"\">"
+    +"<div>"
+    +"<div style=\"font-family:Space Mono,monospace;font-size:11px;letter-spacing:3px;text-transform:uppercase;margin-bottom:6px;color:"+tierColor+"\">"+tierLabel+"</div>"
+    +"<div style=\"font-size:28px;font-weight:700;letter-spacing:-.5px\">"+conf+"%</div>"
+    +"<div style=\"margin-top:6px;font-size:13px;color:var(--t2)\">"+(S.brand||"")+(S.model?" "+S.model:"")+"</div>"
+    +platforms
+    +"</div>"
+    +"<div class=\"cr\"><svg viewBox=\"0 0 80 80\" width=\"80\" height=\"80\">"
+    +"<circle class=\"rb\" cx=\"40\" cy=\"40\" r=\"35\" stroke-dasharray=\""+circ+"\" stroke-dashoffset=\"0\"/>"
+    +"<circle class=\"r"+(vc==="a"?"a":vc==="r"?"r2":"i")+"\" cx=\"40\" cy=\"40\" r=\"35\" stroke-dasharray=\""+circ+"\" stroke-dashoffset=\""+dash+"\" style=\"transition:stroke-dashoffset 1s ease\"/>"
+    +"</svg><div class=\"cn\">"+conf+"%</div></div></div>"
+    +"<div class=\"rbody\">";
+
+  // Tier explanation box
+  h += "<div class=\"rs\"><div style=\"background:"+tierBg+";border:1px solid "+tierBorder+";border-radius:8px;padding:14px 16px;font-size:13px;line-height:1.6;color:var(--tx)\">"+tierDesc+"</div></div>";
+
+  if(summ)h+="<div class=\"rs\"><div class=\"rst\">AI Analysis Summary</div><div class=\"rtx\">"+summ+"</div></div>";
   if(chks.length){
-    h += "<div class=\"rs\"><div class=\"rst\">Authentication Checks</div><div class=\"ckg\">";
+    h+="<div class=\"rs\"><div class=\"rst\">Authentication Checks</div><div class=\"ckg\">";
     for(var i=0;i<chks.length;i++){
-      var pass = /^\s*-\s*\[?\+/.test(chks[i]);
-      h += "<div class=\"cki\"><div class=\"cko\" style=\"color:" + (pass?"var(--ac)":"var(--re)") + "\">" + (pass?"[+]":"[-]") + "</div><div class=\"ckd\">" + chks[i].replace(/^[-\s\[\]+xX]+/,"").trim() + "</div></div>";
+      var pass=/^\s*-\s*\[?\+/.test(chks[i]);
+      h+="<div class=\"cki\"><div class=\"cko\" style=\"color:"+(pass?"var(--ac)":"var(--re)")+"\">"+(pass?"[+]":"[-]")+"</div><div class=\"ckd\">"+chks[i].replace(/^[-\s\[\]+xX]+/,"").trim()+"</div></div>";
     }
-    h += "</div></div>";
+    h+="</div></div>";
   }
-  if(flgs.length && !(flgs.length===1 && /none/i.test(flgs[0]))){
-    h += "<div class=\"rs\"><div class=\"rst\">Red Flags</div><div class=\"fl\">";
+  if(flgs.length&&!(flgs.length===1&&/none/i.test(flgs[0]))){
+    h+="<div class=\"rs\"><div class=\"rst\">Red Flags</div><div class=\"fl\">";
     for(var i=0;i<flgs.length;i++){
-      h += "<div class=\"fi\"><div class=\"fd\"></div><span>" + flgs[i].replace(/^[-\s*]+/,"").trim() + "</span></div>";
+      h+="<div class=\"fi\"><div class=\"fd\"></div><span>"+flgs[i].replace(/^[-\s*]+/,"").trim()+"</span></div>";
     }
-    h += "</div></div>";
+    h+="</div></div>";
   }
-  if(rec) h += "<div class=\"rs\"><div class=\"rst\">Recommendation</div><div class=\"rec" + (vc==="r"?" rep":vc==="i"?" inc":"") + "\">" + rec + "</div></div>";
-  h += "</div>";
-  var el = g("rout");
-  el.innerHTML = h; el.className = "rc"; el.classList.remove("hidden");
+  if(rec)h+="<div class=\"rs\"><div class=\"rst\">Recommendation</div><div class=\"rec"+(vc==="r"?" rep":vc==="i"?" inc":"")+"\" >"+rec+"</div></div>";
+  h+="</div>";
+
+  var el=g("rout");
+  el.innerHTML=h; el.className="rc"; el.classList.remove("hidden");
   g("brst").classList.remove("hidden");
   el.scrollIntoView({behavior:"smooth",block:"start"});
 }
-
 function renderError(msg){
   g("ldg").classList.add("hidden");
   g("rout").innerHTML = "<div style=\"padding:32px;text-align:center\"><div style=\"font-size:13px;color:var(--re);font-family:Space Mono,monospace;margin-bottom:8px\">ANALYSIS FAILED</div><div style=\"font-size:14px;color:var(--t2)\">" + msg + "</div></div>";
