@@ -317,9 +317,9 @@ function renderResult(t){
   } else if(conf>=80){
     tier="AUTH_MED"; tierLabel="Likely Authentic";
     tierColor="#7fff00"; tierBg="rgba(127,255,0,.08)"; tierBorder="rgba(127,255,0,.25)";
-    tierDesc="Likely authentic but not a slam dunk. Fine for most platforms — verify tags in hand before StockX.";
+    tierDesc="Likely authentic but not a slam dunk. Fine for most platforms â verify tags in hand before StockX.";
   } else if(conf>=65){
-    tier="UNCERTAIN"; tierLabel="Uncertain — Needs Review";
+    tier="UNCERTAIN"; tierLabel="Uncertain â Needs Review";
     tierColor="var(--ye)"; tierBg="rgba(255,204,0,.08)"; tierBorder="rgba(255,204,0,.2)";
     tierDesc="Score too low to confidently pass. Request clearer photos of tags, stitching, and labels.";
   } else {
@@ -339,13 +339,13 @@ function renderResult(t){
       +"</div>";
   } else if(tier==="AUTH_MED"){
     platforms = "<div style=\"margin-top:12px;display:flex;flex-wrap:wrap;gap:6px\">"
-      +"<span style=\"font-size:11px;padding:4px 10px;border-radius:4px;background:rgba(255,204,0,.15);color:var(--ye);font-family:Space Mono,monospace\">STOCKX — VERIFY TAGS</span>"
+      +"<span style=\"font-size:11px;padding:4px 10px;border-radius:4px;background:rgba(255,204,0,.15);color:var(--ye);font-family:Space Mono,monospace\">STOCKX â VERIFY TAGS</span>"
       +"<span style=\"font-size:11px;padding:4px 10px;border-radius:4px;background:rgba(0,255,136,.15);color:var(--ac);font-family:Space Mono,monospace\">GOAT OK</span>"
       +"<span style=\"font-size:11px;padding:4px 10px;border-radius:4px;background:rgba(0,255,136,.15);color:var(--ac);font-family:Space Mono,monospace\">GRAILED OK</span>"
       +"</div>";
   } else if(tier==="UNCERTAIN"||tier==="INCONCLUSIVE"){
     platforms = "<div style=\"margin-top:12px;display:flex;flex-wrap:wrap;gap:6px\">"
-      +"<span style=\"font-size:11px;padding:4px 10px;border-radius:4px;background:rgba(255,51,85,.15);color:var(--re);font-family:Space Mono,monospace\">STOCKX — DO NOT LIST</span>"
+      +"<span style=\"font-size:11px;padding:4px 10px;border-radius:4px;background:rgba(255,51,85,.15);color:var(--re);font-family:Space Mono,monospace\">STOCKX â DO NOT LIST</span>"
       +"<span style=\"font-size:11px;padding:4px 10px;border-radius:4px;background:rgba(255,204,0,.15);color:var(--ye);font-family:Space Mono,monospace\">REQUEST MORE PHOTOS</span>"
       +"</div>";
   } else {
@@ -361,14 +361,14 @@ function renderResult(t){
   var h="<div style=\"padding:28px 32px;display:flex;align-items:center;justify-content:space-between;background:"+tierBg+";border-bottom:1px solid "+tierBorder+"\">"
     +"<div>"
     +"<div style=\"font-family:Space Mono,monospace;font-size:11px;letter-spacing:3px;text-transform:uppercase;margin-bottom:6px;color:"+tierColor+"\">"+tierLabel+"</div>"
-    +"<div style=\"font-size:28px;font-weight:700;letter-spacing:-.5px\">"+conf+"%</div>"
+    +"<div style=\"font-size:28px;font-weight:700;letter-spacing:-.5px\">"+conf+"% "+ (v==="REPLICA" ? "REPLICA" : v==="INCONCLUSIVE" ? "UNCERTAIN" : "AUTHENTIC")+"</div>"
     +"<div style=\"margin-top:6px;font-size:13px;color:var(--t2)\">"+(S.brand||"")+(S.model?" "+S.model:"")+"</div>"
     +platforms
     +"</div>"
     +"<div class=\"cr\"><svg viewBox=\"0 0 80 80\" width=\"80\" height=\"80\">"
     +"<circle class=\"rb\" cx=\"40\" cy=\"40\" r=\"35\" stroke-dasharray=\""+circ+"\" stroke-dashoffset=\"0\"/>"
     +"<circle class=\"r"+(vc==="a"?"a":vc==="r"?"r2":"i")+"\" cx=\"40\" cy=\"40\" r=\"35\" stroke-dasharray=\""+circ+"\" stroke-dashoffset=\""+dash+"\" style=\"transition:stroke-dashoffset 1s ease\"/>"
-    +"</svg><div class=\"cn\">"+conf+"%</div></div></div>"
+    +"</svg><div class=\"cn\" style=\"font-size:11px;text-align:center;line-height:1.3\">"+(v==="REPLICA"?"FAKE":"AUTH")+"<br>"+conf+"%</div></div></div>"
     +"<div class=\"rbody\">";
 
   // Tier explanation box
